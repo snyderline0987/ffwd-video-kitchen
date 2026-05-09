@@ -20,6 +20,8 @@ services:
       - ./skills/video-kitchen:/usr/local/lib/node_modules/openclaw/skills/video-kitchen
       - ./skills/video-kitchen-recipe-creator:/usr/local/lib/node_modules/openclaw/skills/video-kitchen-recipe-creator
       - ./skills/film-editing-theory:/usr/local/lib/node_modules/openclaw/skills/film-editing-theory
+      - ./skills/hyperframes:/usr/local/lib/node_modules/openclaw/skills/hyperframes
+      - ./skills/open-design:/usr/local/lib/node_modules/openclaw/skills/open-design
       # Mounte das rohe Video-Material (z.B. ein lokales NAS oder SSD)
       - /path/to/your/raw/footage:/workspace/raw_footage
     ports:

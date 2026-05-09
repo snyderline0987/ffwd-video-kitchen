@@ -29,6 +29,8 @@ Dieses Repository enthält die "Skills", die OpenClaw beibringen, wie man Videos
 - `skills/video-kitchen/` - Der Kern-Skill zum Generieren der Hyperframes-Videos.
 - `skills/video-kitchen-recipe-creator/` - Der Skill zum Betreiben des lokalen Rezept-Dashboards.
 - `skills/film-editing-theory/` - Ein Theoriesatz, den der Agent als Regelwerk beim Schneiden nutzt (Dmytryk, Menke, etc.).
+- `skills/hyperframes/` - Die Kern-Engine für HTML/CSS basierte Video-Compositions.
+- `skills/open-design/` - Integration von nexu-io/open-design zur Generierung von UI- und Grafik-Overlays direkt aus Design-Files.
 - `docker-compose.yml` - Das Rezept, um die ganze "Box" mit einem Klick zu starten.
 
 ## 🚀 Quick Start (Deploying the Agent)
