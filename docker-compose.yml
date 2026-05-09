@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  openclaw-agent:
+    image: openclaw/openclaw:latest
+    container_name: video-kitchen-agent
+    restart: unless-stopped
+    environment:
+      # Hier können die API Keys für Gemini, OpenAI, etc. übergeben werden
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      # Für ChatOps (Discord)
+      - DISCORD_TOKEN=${DISCORD_TOKEN:-}
+      # Tailscale für Remote-Access (optional)
+      - TS_AUTHKEY=${TS_AUTHKEY:-}
+    volumes:
+      # Mounte den Workspace, damit die Dateien lokal persistieren
+      - ./workspace:/workspace
+      # Mounte unsere spezifischen Video Kitchen Skills in den Agenten
+      - ./skills/video-kitchen:/usr/local/lib/node_modules/openclaw/skills/video-kitchen
+      - ./skills/video-kitchen-recipe-creator:/usr/local/lib/node_modules/openclaw/skills/video-kitchen-recipe-creator
+      - ./skills/film-editing-theory:/usr/local/lib/node_modules/openclaw/skills/film-editing-theory
+      # Mounte das rohe Video-Material (z.B. ein lokales NAS oder SSD)
+      - /path/to/your/raw/footage:/workspace/raw_footage
+    ports:
+      # OpenClaw Web Interface
+      - "3000:3000"
+      # Video Kitchen Recipe Dashboard
+      - "8080:8080"
+      # Hyperframes Local Preview Port (falls man das Studio lokal aufruft)
+      - "3002:3002"
+    command: ["openclaw", "start"]

@@ -1,0 +1,12 @@
+{
+  "id": "social_clip_9x16",
+  "title": "Social Clip 9:16",
+  "aspect_ratio": "9:16",
+  "duration": "15-25s",
+  "description": "Vertikaler Clip für Instagram/TikTok. Fokus auf Hook, Punchline und schnelle Action.",
+  "theory": "Eisenstein (Metric Montage)",
+  "prompt": "Hook in den ersten 1.5s! Wähle Szenen mit viel Bewegung. Center-Crop-safe (wichtig für 9:16).",
+  "vo_pref": "Alloy (schnell, enthusiastisch)",
+  "music_pref": "Upbeat / Trendy (ducked unter Sprache)",
+  "cut_style": "Metric Montage. Sehr schnelle Schnitte, maximal 2-3s pro Clip."
+}

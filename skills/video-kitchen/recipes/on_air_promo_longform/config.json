@@ -1,0 +1,12 @@
+{
+  "id": "on_air_promo_longform",
+  "title": "On Air Promo (Longform)",
+  "aspect_ratio": "16:9",
+  "duration": "40s",
+  "description": "'Nächste Woche bei...' Teaser aus einer langen Sendung. Inklusive Liquid-Text Motion Graphics.",
+  "theory": "Menke (Scene as Mini-Film)",
+  "prompt": "Finde die spannendsten und visuell stärksten Momente. Ignoriere sprechende Köpfe. Baue einen Spannungsbogen.",
+  "vo_pref": "Onyx (tief, spannend, episch)",
+  "music_pref": "shelter_to_the_valley.mp3 (20% Vol)",
+  "cut_style": "Rhythmisch, passend zum Musik-Beat. Schnelle Schnitte am Anfang, lange Holds bei Key-Visuals."
+}

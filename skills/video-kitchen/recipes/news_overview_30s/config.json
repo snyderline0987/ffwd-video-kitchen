@@ -1,0 +1,12 @@
+{
+  "id": "news_overview_30s",
+  "title": "News Overview 30s",
+  "aspect_ratio": "16:9",
+  "duration": "30s",
+  "description": "Knackige Zusammenfassung eines News-Beitrags. Hook -> Context -> Key Fact -> Wrap.",
+  "theory": "Dmytryk (Substance First)",
+  "prompt": "Fasse die Kernfakten des Artikels zusammen. Wähle 4-6 klare B-Roll Szenen. Fokus auf Information.",
+  "vo_pref": "Nova (sachlich, nachrichtlich)",
+  "music_pref": "shelter_to_the_valley.mp3 (15% Vol)",
+  "cut_style": "Klare harte Schnitte (Dmytryk). Bild steht so lange, bis die Info vermittelt ist."
+}
