@@ -6,8 +6,6 @@
         body { 
             background: #111; margin: 0; overflow: hidden; 
             width: 1920px; height: 1080px; 
-            /* Scale it down to fit in the dashboard card */
-            transform: scale(0.25); transform-origin: top left; 
         }
         /* Checkerboard to show transparency */
         .checker {
@@ -29,17 +27,14 @@
     <div id="insert-container"></div>
     
     <script>
-        // Fetch and inject the raw HTML compiled from Open Design
         fetch('raw-lower-third.html').then(r => r.text()).then(html => {
             const container = document.getElementById('insert-container');
             container.innerHTML = html;
             
-            // Re-evaluate the GSAP script inside the fetched HTML
             const scripts = container.querySelectorAll('script');
             scripts.forEach(s => {
                 const newScript = document.createElement('script');
                 newScript.textContent = s.textContent;
-                // Add a loop so it keeps repeating in the dashboard
                 newScript.textContent += "\nltTimeline.repeat(-1).repeatDelay(2);";
                 document.body.appendChild(newScript);
             });
