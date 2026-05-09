@@ -76,10 +76,27 @@
                     </div>
                     <p class="text-gray-400 mb-4 text-sm">Compiled from Figma (mock-octopus.json). Ready for composition rendering.</p>
                     
-                    <div class="w-full bg-[#000] border border-gray-700 rounded overflow-hidden relative mb-4" style="aspect-ratio: 16/9;">
-                        <!-- The iframe loads the 1920x1080 preview scaled down -->
-                        <iframe src="preview-overlay.html" class="absolute top-0 left-0 w-[1920px] h-[1080px] pointer-events-none origin-top-left" style="transform: scale(calc(100% / 1920));"></iframe>
+                    <div class="w-full bg-[#000] border border-gray-700 rounded overflow-hidden relative mb-4" id="iframe-wrapper" style="aspect-ratio: 16/9;">
+                        <iframe src="preview-overlay.html" class="absolute top-0 left-0 w-[1920px] h-[1080px] pointer-events-none origin-top-left" id="scaled-iframe"></iframe>
                     </div>
+                    <script>
+                        // Dynamically scale the iframe based on the container width
+                        function resizeIframe() {
+                            const wrapper = document.getElementById('iframe-wrapper');
+                            const iframe = document.getElementById('scaled-iframe');
+                            if(wrapper && iframe) {
+                                const scale = wrapper.clientWidth / 1920;
+                                iframe.style.transform = `scale(${scale})`;
+                            }
+                        }
+                        window.addEventListener('resize', resizeIframe);
+                        // Initial sizing
+                        setTimeout(resizeIframe, 100);
+                        // Also hook into tab switch
+                        document.querySelectorAll('.tab-btn').forEach(btn => {
+                            btn.addEventListener('click', () => setTimeout(resizeIframe, 50));
+                        });
+                    </script>
                     
                     <div class="mt-auto flex gap-2">
                         <button class="w-1/2 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-xs">Copy HTML Tag</button>
