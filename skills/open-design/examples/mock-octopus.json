@@ -1,0 +1,44 @@
+{
+  "id": "figma-export-123",
+  "name": "FFWD Lower Third",
+  "dimensions": { "width": 1920, "height": 1080 },
+  "layers": [
+    {
+      "id": "box-name",
+      "type": "SHAPE",
+      "name": "Name Background",
+      "x": 120, "y": 800, "width": 600, "height": 80,
+      "style": { "fill": { "r": 229, "g": 9, "b": 20, "a": 1 } }
+    },
+    {
+      "id": "text-name",
+      "type": "TEXT",
+      "name": "Name Text",
+      "x": 150, "y": 815,
+      "text": "DANIEL SCHNEIDER",
+      "style": {
+        "fontFamily": "Impact, sans-serif", "fontSize": 48, "fontWeight": 800,
+        "color": { "r": 255, "g": 255, "b": 255, "a": 1 },
+        "letterSpacing": "2px"
+      }
+    },
+    {
+      "id": "box-title",
+      "type": "SHAPE",
+      "name": "Title Background",
+      "x": 120, "y": 880, "width": 450, "height": 50,
+      "style": { "fill": { "r": 17, "g": 17, "b": 17, "a": 0.9 } }
+    },
+    {
+      "id": "text-title",
+      "type": "TEXT",
+      "name": "Title Text",
+      "x": 150, "y": 890,
+      "text": "Head of Video Kitchen",
+      "style": {
+        "fontFamily": "Arial, sans-serif", "fontSize": 24, "fontWeight": 400,
+        "color": { "r": 200, "g": 200, "b": 200, "a": 1 }
+      }
+    }
+  ]
+}

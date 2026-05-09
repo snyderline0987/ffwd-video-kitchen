@@ -14,3 +14,7 @@ When a user asks to convert a UI or graphic layout into a video composition:
 ## Principles
 - **No external heavy dependencies:** Render Open Design shapes via native HTML/CSS/SVG inside the Hyperframes DOM.
 - **Determinism:** Ensure any auto-layout or responsive behavior from Open Design is locked to the exact 16:9 or 9:16 aspect ratio defined in the Video Kitchen recipe.
+
+## Examples & Code Snippets
+The `examples/` directory contains a fully functional prototype of translating an Open Design JSON (`mock-octopus.json`) into a deterministic Hyperframes Component (`lower-third.html`) using a Node.js parsing script (`parse.js`). 
+This logic is used by the agent to automatically convert CI elements (like lower thirds) from design files directly into the Video Kitchen recipes.
