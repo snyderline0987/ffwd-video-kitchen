@@ -71,7 +71,7 @@
                 <!-- Opener Preview Card -->
                 <div class="card p-6 rounded-lg flex flex-col h-full bg-[#111] border-gray-800">
                     <div class="flex justify-between items-start mb-4">
-                        <h2 class="text-xl font-bold text-white">FFWD Opener (WebM)</h2>
+                        <h2 class="text-xl font-bold text-white">W24 On Air Opener | GLEICH | classic</h2>
                         <span class="bg-blue-900 text-blue-300 px-2 py-1 rounded text-xs uppercase font-bold">Standard CI</span>
                     </div>
                     <p class="text-gray-400 mb-4 text-sm">Transparent animated WebM overlay for the standard FFWD opener sequence.</p>
@@ -102,10 +102,13 @@
                         function resizeIframe() {
                             const wrappers = document.querySelectorAll('.iframe-wrapper');
                             const iframes = document.querySelectorAll('.scaled-iframe');
-                            if(wrapper && iframe) {
-                                const scale = wrapper.clientWidth / 1920;
-                                iframe.style.transform = `scale(${scale})`;
-                            }
+                            wrappers.forEach((wrapper, i) => {
+                                const iframe = iframes[i];
+                                if(wrapper && iframe) {
+                                    const scale = wrapper.clientWidth / 1920;
+                                    iframe.style.transform = `scale(${scale})`;
+                                }
+                            });
                         }
                         window.addEventListener('resize', resizeIframe);
                         // Initial sizing
