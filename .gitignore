@@ -3,3 +3,7 @@ node_modules/
 *.log
 *.pid
 raw_footage/
+*.mp4
+*.webm
+!skills/video-kitchen/recipes/public/opener.webm
+!skills/open-design/examples/opener.webm
