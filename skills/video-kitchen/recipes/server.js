@@ -28,7 +28,10 @@ app.get('/api/recipes', (req, res) => {
         const configPath = path.join(__dirname, dir, 'config.json');
         if (fs.existsSync(configPath)) {
             const configData = readJsonSafe(configPath);
-            if(configData) recipes.push(configData);
+            if(configData) {
+                configData.has_composition = fs.existsSync(path.join(__dirname, dir, 'composition.html'));
+                recipes.push(configData);
+            }
         }
     });
     res.json(recipes);
