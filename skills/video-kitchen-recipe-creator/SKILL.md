@@ -41,6 +41,46 @@ recipes/
 
 ## Recipe Generation Workflow
 
+### Step 0: Source Analysis (ALWAYS FIRST)
+Every Video Kitchen production starts by analyzing the source material.
+
+**Run the source analyzer:**
+```bash
+python3 skills/video-kitchen/recipes/analyze-source.py source_video.mp4
+```
+
+This creates an `analysis/` directory with:
+- `thumbnails/` — mid-frame JPGs for each segment (vision analysis input)
+- `audio.wav` — extracted audio for transcription
+- `manifest.json` — structured clip data (timestamps, brightness, motion)
+
+**Then analyze thumbnails with the vision model:**
+- Feed thumbnails to the image model (max 20 per call)
+- For each clip, determine:
+  - `content_type`: `talking_head` (skip for teasers) | `crowd` (atmosphere) | `action` (energy)
+  - `teaser_rating`: 1-5 (5 = hero shot, 1 = skip)
+  - `description`: 1-2 sentence visual description
+- Update `manifest.json` with ratings
+
+**Transcribe audio:**
+```bash
+npx hyperframes transcribe analysis/audio.wav
+```
+- Adds time-stamped text to the manifest
+- Used for context understanding and potential captions
+
+**Clip selection rules (based on ratings):**
+- ⭐⭐⭐⭐⭐ (5) — Hero shots, openers, key moments
+- ⭐⭐⭐⭐ (4) — Strong atmosphere, good energy
+- ⭐⭐⭐ (3) — Usable as B-roll, transitions
+- ⭐⭐ (2) — Talking heads, only if needed for context
+- ⭐ (1) — Skip unless essential for narrative
+- **Never** open a teaser with clip rating ≤ 2
+- **Always** prefer `action` > `crowd` > `talking_head`
+- **Prioritize** night/low-light clips for drama, day clips for context
+
+**Output:** A rated, described manifest with transcription → feed to recipe step.
+
 ### Step 1: Define the Purpose and Arc
 - What is the goal of this video format? (e.g., Sales, News, TikTok meme, Explainer)
 - What is the target duration and aspect ratio?

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESC 2026 — Halbfinale 1 im Village | W24 Teaser</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  @font-face {
+    font-family: 'WienerMelange';
+    src: url('fonts/WienerMelange_W_Rg.woff2') format('woff2'), url('fonts/WienerMelange_W_Rg.woff') format('woff');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'WienerMelange';
+    src: url('fonts/WienerMelange_W_ExBd.woff2') format('woff2'), url('fonts/WienerMelange_W_ExBd.woff') format('woff');
+    font-weight: 800;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; overflow: hidden; font-family: 'WienerMelange', 'Inter', sans-serif; color: #fff; }
+
+  .canvas { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+
+  /* Video layer — full background */
+  .video-layer {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1;
+  }
+
+  .video-layer video {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+  }
+
+  /* Dark overlay for text readability */
+  .overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.6) 100%);
+    z-index: 2;
+    opacity: 0;
+  }
+
+  /* Graphics layer */
+  .gfx {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 10;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scene {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    opacity: 0;
+  }
+
+  /* Top bar — ESC gradient */
+  .top-bar {
+    position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+    background: linear-gradient(90deg, #0055b7 0%, #ff3a65 30%, #ffd700 60%, #00a651 100%);
+    z-index: 20; opacity: 0;
+  }
+
+  /* W24 bug — bottom right */
+  .w24-bug {
+    position: absolute; bottom: 20px; right: 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(10px, 1.2vw, 18px);
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.6);
+    z-index: 20; opacity: 0;
+  }
+
+  /* === Typography === */
+  .hook-label {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(10px, 1.2vw, 18px);
+    font-weight: 800;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #ff3a65;
+    padding: clamp(4px, 0.5vw, 8px) clamp(12px, 1.5vw, 24px);
+    border: 2px solid #ff3a65;
+    opacity: 0;
+  }
+
+  .headline {
+    font-size: clamp(36px, 7vw, 120px);
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.05;
+    max-width: 85vw;
+    text-shadow: 0 4px 40px rgba(0,0,0,0.6);
+    opacity: 0;
+  }
+
+  .headline .gold { color: #ffd700; }
+
+  .sub-line {
+    font-size: clamp(14px, 1.8vw, 28px);
+    font-weight: 400;
+    color: rgba(255,255,255,0.7);
+    margin-top: clamp(8px, 1vw, 16px);
+    text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    opacity: 0;
+  }
+
+  /* Fact pills */
+  .fact-row {
+    display: flex; gap: clamp(8px, 1.5vw, 24px);
+    opacity: 0;
+  }
+
+  .fact-pill {
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 100px;
+    padding: clamp(8px, 1vw, 16px) clamp(16px, 2vw, 32px);
+    font-size: clamp(12px, 1.5vw, 24px);
+    font-weight: 700;
+    opacity: 0;
+  }
+
+  /* CTA */
+  .cta-headline {
+    font-size: clamp(28px, 5vw, 80px);
+    font-weight: 800;
+    text-align: center;
+    text-shadow: 0 4px 40px rgba(0,0,0,0.7);
+    opacity: 0;
+  }
+
+  .cta-headline .pink { color: #ff3a65; }
+
+  .cta-channel {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(14px, 1.8vw, 28px);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    margin-top: clamp(12px, 1.5vw, 24px);
+    text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    opacity: 0;
+  }
+
+  .cta-url {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(10px, 1.2vw, 20px);
+    color: rgba(255,255,255,0.4);
+    margin-top: clamp(8px, 1vw, 16px);
+    opacity: 0;
+  }
+
+  /* Progress */
+  .progress {
+    position: absolute; bottom: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, #0055b7, #ff3a65, #ffd700);
+    width: 0%; z-index: 30; opacity: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="canvas">
+  <!-- Video layer -->
+  <div class="video-layer">
+    <video id="v1" src="media/esc-clips/clip1.mp4" muted playsinline preload="auto"></video>
+    <video id="v2" src="media/esc-clips/clip2.mp4" muted playsinline preload="auto"></video>
+    <video id="v3" src="media/esc-clips/clip3.mp4" muted playsinline preload="auto"></video>
+    <video id="v4" src="media/esc-clips/clip4.mp4" muted playsinline preload="auto"></video>
+    <video id="v5" src="media/esc-clips/clip5.mp4" muted playsinline preload="auto"></video>
+    <video id="v6" src="media/esc-clips/clip6.mp4" muted playsinline preload="auto"></video>
+    <video id="v7" src="media/esc-clips/clip7.mp4" muted playsinline preload="auto"></video>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Graphics -->
+  <div class="top-bar" id="topbar"></div>
+  <div class="w24-bug">W24</div>
+
+  <!-- SCENE 1: Hook (0-5s) — clip1 -->
+  <div class="scene" id="s1">
+    <div class="hook-label">ESC 2026 · Wien</div>
+    <div class="headline">Halbfinale 1<br><span class="gold">im Village</span></div>
+    <div class="sub-line">Rathausplatz · Wien</div>
+  </div>
+
+  <!-- SCENE 2: Atmosphere (5-9s) — clip2 + clip3 -->
+  <div class="scene" id="s2">
+    <div class="sub-line" style="font-size:clamp(18px,2.5vw,40px); max-width:75vw; text-align:center; line-height:1.6;">
+      Nach dem Unwetter am Montag<br>
+      brachte Dienstag <span style="color:#ffd700;font-weight:700;">trockenes Wetter</span>
+    </div>
+  </div>
+
+  <!-- SCENE 3: Energy (9-17s) — clip3 + clip4 + clip5 -->
+  <div class="scene" id="s3">
+    <div class="headline" style="font-size:clamp(24px,4.5vw,72px);">
+      Fans feiern das<br><span class="gold">Eurovision Village</span>
+    </div>
+  </div>
+
+  <!-- SCENE 4: Key facts (17-24s) — clip6 + clip7 -->
+  <div class="scene" id="s4">
+    <div class="fact-row" id="facts">
+      <div class="fact-pill">🌧️ Montag: Unwetter</div>
+      <div class="fact-pill">☀️ Dienstag: Trocken</div>
+      <div class="fact-pill">👥 Gut besucht</div>
+    </div>
+  </div>
+
+  <!-- SCENE 5: CTA (24-30s) — clip7 -->
+  <div class="scene" id="s5">
+    <div class="cta-headline">
+      ESC 2026<br><span class="pink">So lief HF 1</span>
+    </div>
+    <div class="cta-channel">W24 WIEN TV</div>
+    <div class="cta-url">w24.at/ESC-Halbfinale-Village</div>
+  </div>
+
+  <div class="progress" id="progress"></div>
+</div>
+
+<script>
+(function() {
+  const TOTAL = 30;
+  let tl;
+  const videos = [
+    document.getElementById('v1'),
+    document.getElementById('v2'),
+    document.getElementById('v3'),
+    document.getElementById('v4'),
+    document.getElementById('v5'),
+    document.getElementById('v6'),
+    document.getElementById('v7')
+  ];
+
+  function hideAllVideos() {
+    videos.forEach(v => { v.style.opacity = 0; v.pause(); v.currentTime = 0; });
+  }
+
+  function showVideo(idx) {
+    hideAllVideos();
+    const v = videos[idx];
+    if (v) {
+      v.currentTime = 0;
+      v.style.opacity = 1;
+      v.play().catch(() => {});
+    }
+  }
+
+  function build() {
+    if (tl) tl.kill();
+    tl = gsap.timeline({ paused: true, repeat: -1, repeatDelay: 3 });
+
+    // Ambient
+    tl.to('#topbar', { opacity: 1, duration: 0.5 }, 0);
+    tl.to('.w24-bug', { opacity: 1, duration: 0.5 }, 0);
+    tl.to('#progress', { opacity: 1, duration: 0.3 }, 0);
+    tl.to('#progress', { width: '100%', duration: TOTAL, ease: 'none' }, 0);
+
+    // ==============================
+    // SCENE 1: Hook (0-5s) — clip1 (entrance)
+    // ==============================
+    tl.call(() => showVideo(0), null, 0)
+      .to('#overlay', { opacity: 1, duration: 0.5 }, 0)
+      .set('#s1', { opacity: 1 }, 0)
+      .fromTo('.hook-label', { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: 'back.out(2)' }, 0.5)
+      .fromTo('.headline', { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, 0.8)
+      .fromTo('.sub-line', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 1.8)
+      .to('#s1', { opacity: 0, duration: 0.5 }, 4.5);
+
+    // ==============================
+    // SCENE 2: Context (5-9s) — clip2 (tables)
+    // ==============================
+    tl.call(() => showVideo(1), null, 5)
+      .set('#s2', { opacity: 1 }, 5)
+      .fromTo('#s2 .sub-line', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }, 5.3)
+      .to('#s2', { opacity: 0, duration: 0.4 }, 8.5);
+
+    // ==============================
+    // SCENE 3: Energy (9-17s) — clip3,4,5 (fans, crowd, interview)
+    // ==============================
+    tl.call(() => showVideo(2), null, 9)    // smiling fan
+      .call(() => showVideo(3), null, 11.5) // cheering crowd
+      .call(() => showVideo(4), null, 14)   // blue hair interview
+      .set('#s3', { opacity: 1 }, 9)
+      .fromTo('#s3 .headline', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, 9.3)
+      .to('#s3', { opacity: 0, duration: 0.4 }, 16.5);
+
+    // ==============================
+    // SCENE 4: Key facts (17-24s) — clip6,7 (flags, wide crowd)
+    // ==============================
+    tl.call(() => showVideo(5), null, 17)   // flags
+      .call(() => showVideo(6), null, 20)   // wide night
+      .set('#s4', { opacity: 1 }, 17)
+      .to('#facts', { opacity: 1, duration: 0.3 }, 17.3)
+      .fromTo('.fact-pill', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, stagger: 0.15, ease: 'power2.out' }, 17.4)
+      .to('#s4', { opacity: 0, duration: 0.4 }, 23.5);
+
+    // ==============================
+    // SCENE 5: CTA (24-30s) — clip7 holds
+    // ==============================
+    tl.set('#s5', { opacity: 1 }, 24)
+      .fromTo('.cta-headline', { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: 'power3.out' }, 24.3)
+      .fromTo('.cta-channel', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 25.2)
+      .fromTo('.cta-url', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 25.5)
+      .to('#s5', { opacity: 0, duration: 0.8 }, 29);
+
+    tl.set('#progress', { width: '0%' }, TOTAL);
+
+    window.__timelines = [tl];
+    window.__duration = TOTAL;
+    return tl;
+  }
+
+  // Wait for videos to be ready
+  Promise.all(videos.map(v => new Promise(r => { v.addEventListener('canplaythrough', r, { once: true }); v.load(); })))
+    .then(() => { build(); tl.play(); })
+    .catch(() => { build(); tl.play(); });
+
+  window.addEventListener('hf-seek', function(e) {
+    var t = (e && e.detail && e.detail.time != null) ? e.detail.time : 0;
+    if (tl) { tl.time(t); tl.pause(); }
+  });
+})();
+</script>
+</body>
+</html>

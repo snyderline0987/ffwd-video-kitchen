@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Kitchen Box — Teaser</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0a;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+  }
+
+  .canvas {
+    position: relative;
+    width: 100vw; height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Scanlines */
+  .scanlines {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0;
+  }
+
+  /* Red glow */
+  .glow {
+    position: absolute;
+    width: 60vw; height: 60vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(229,9,20,0.15) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Scene 1: Title */
+  .scene {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .brand-mark {
+    font-size: clamp(12px, 1.5vw, 24px);
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #e50914;
+    opacity: 0;
+  }
+
+  .title-main {
+    font-size: clamp(40px, 8vw, 140px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+    text-align: center;
+    opacity: 0;
+  }
+
+  .title-main span {
+    display: block;
+  }
+
+  .title-accent {
+    color: #e50914;
+  }
+
+  .subtitle {
+    font-size: clamp(14px, 1.8vw, 28px);
+    font-weight: 300;
+    color: rgba(255,255,255,0.6);
+    margin-top: clamp(16px, 2vw, 32px);
+    letter-spacing: 0.1em;
+    opacity: 0;
+  }
+
+  /* Scene 2: Features */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 3vw, 48px);
+    max-width: 80vw;
+    opacity: 0;
+  }
+
+  .feature-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: clamp(16px, 2.5vw, 40px);
+    opacity: 0;
+  }
+
+  .feature-card h3 {
+    font-size: clamp(16px, 2vw, 32px);
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #e50914;
+  }
+
+  .feature-card p {
+    font-size: clamp(11px, 1.2vw, 18px);
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+
+  /* Scene 3: Recipes showcase */
+  .recipe-row {
+    display: flex;
+    gap: clamp(12px, 2vw, 32px);
+    align-items: center;
+    opacity: 0;
+  }
+
+  .recipe-pill {
+    background: rgba(229,9,20,0.1);
+    border: 1px solid rgba(229,9,20,0.3);
+    border-radius: 100px;
+    padding: clamp(8px, 1.2vw, 18px) clamp(16px, 2.5vw, 40px);
+    font-weight: 600;
+    font-size: clamp(12px, 1.4vw, 22px);
+    white-space: nowrap;
+    opacity: 0;
+  }
+
+  /* Scene 4: Code preview */
+  .code-block {
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: clamp(20px, 3vw, 48px);
+    max-width: 70vw;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(10px, 1.2vw, 18px);
+    line-height: 1.8;
+    opacity: 0;
+    overflow: hidden;
+  }
+
+  .code-block .comment { color: rgba(255,255,255,0.3); }
+  .code-block .keyword { color: #e50914; }
+  .code-block .string { color: #4ade80; }
+  .code-block .func { color: #60a5fa; }
+
+  /* Scene 5: CTA */
+  .cta-text {
+    font-size: clamp(24px, 4vw, 64px);
+    font-weight: 800;
+    text-align: center;
+    opacity: 0;
+  }
+
+  .cta-url {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(12px, 1.5vw, 24px);
+    color: #e50914;
+    margin-top: clamp(12px, 1.5vw, 24px);
+    opacity: 0;
+  }
+
+  /* Progress bar */
+  .progress {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 3px;
+    background: #e50914;
+    width: 0%;
+    z-index: 100;
+  }
+</style>
+</head>
+<body>
+
+<div class="canvas">
+  <div class="scanlines"></div>
+  <div class="glow"></div>
+
+  <!-- Scene 1: Title -->
+  <div class="scene" id="scene1">
+    <div class="brand-mark">Introducing</div>
+    <div class="title-main">
+      <span>Video</span>
+      <span class="title-accent">Kitchen</span>
+      <span>Box</span>
+    </div>
+    <div class="subtitle">Agentic Video Production Studio</div>
+  </div>
+
+  <!-- Scene 2: Features -->
+  <div class="scene" id="scene2">
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>🎬 11+ Recipes</h3>
+        <p>Modular video formats. Add a folder, get a recipe. Social clips, explainers, promos — plug and play.</p>
+      </div>
+      <div class="feature-card">
+        <h3>⚡ Motion Templates</h3>
+        <p>Bauchbinde. Lower thirds. Openers. Your broadcast graphics, parameterized and live-configurable.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🤖 Agent-Driven</h3>
+        <p>Powered by OpenClaw. Chat with your video studio. Tell it what to make. It makes it.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🐳 One Command</h3>
+        <p>docker-compose up -d. That's it. Full stack. Local first. No cloud dependency.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 3: Recipe showcase -->
+  <div class="scene" id="scene3">
+    <div class="brand-mark" style="margin-bottom: clamp(24px, 3vw, 48px);">Recipes</div>
+    <div class="recipe-row">
+      <div class="recipe-pill">📡 W24 Opener</div>
+      <div class="recipe-pill">📋 Lower Third</div>
+      <div class="recipe-pill">🏷️ Bauchbinde</div>
+      <div class="recipe-pill">⚽ Rapid Insert</div>
+    </div>
+    <div class="recipe-row" style="margin-top: clamp(12px, 1.5vw, 24px);">
+      <div class="recipe-pill">🎥 Social Clip</div>
+      <div class="recipe-pill">📝 Explainer</div>
+      <div class="recipe-pill">🎯 Promo</div>
+      <div class="recipe-pill">➕ Your Recipe</div>
+    </div>
+  </div>
+
+  <!-- Scene 4: Code -->
+  <div class="scene" id="scene4">
+    <div class="code-block">
+      <div><span class="comment"># Spin up your video studio</span></div>
+      <div><span class="keyword">git</span> clone https://github.com/snyderline0987/video-kitchen-box.git</div>
+      <div><span class="keyword">cd</span> video-kitchen-box</div>
+      <div><span class="keyword">docker-compose</span> up -d</div>
+      <br>
+      <div><span class="comment"># Tell the agent what to make</span></div>
+      <div><span class="string">"Make a Bauchbinde for Daniel Schneider, Head of Video Kitchen"</span></div>
+      <br>
+      <div><span class="comment"># It renders. Locally. No upload.</span></div>
+      <div><span class="func">✓</span> composition-bauchbinde.html <span class="string">→</span> output.mp4</div>
+    </div>
+  </div>
+
+  <!-- Scene 5: CTA -->
+  <div class="scene" id="scene5">
+    <div class="cta-text">
+      Your Kitchen.<br>
+      Your <span class="title-accent">Rules</span>.
+    </div>
+    <div class="cta-url">github.com/snyderline0987/video-kitchen-box</div>
+  </div>
+
+  <div class="progress" id="progress"></div>
+</div>
+
+<script>
+(function() {
+  const TOTAL = 15; // seconds
+  let tl;
+
+  function build() {
+    if (tl) tl.kill();
+    tl = gsap.timeline({ paused: true, repeat: -1, repeatDelay: 2 });
+
+    // Progress bar
+    tl.to('#progress', { width: '100%', duration: TOTAL, ease: 'none' }, 0);
+
+    // Scanlines fade in
+    tl.to('.scanlines', { opacity: 1, duration: 1 }, 0);
+
+    // === SCENE 1: Title (0 - 4s) ===
+    tl.set('#scene1', { opacity: 1 }, 0)
+      .fromTo('.brand-mark', { y: 20 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }, 0.3)
+      .fromTo('.title-main span', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', stagger: 0.12 }, 0.6)
+      .fromTo('.subtitle', { y: 20 }, { y: 0, opacity: 1, duration: 0.5 }, 1.2)
+      .to('.glow', { opacity: 1, duration: 2 }, 0.5)
+      // Exit
+      .to('#scene1', { opacity: 0, duration: 0.5 }, 3.5);
+
+    // === SCENE 2: Features (4 - 8s) ===
+    tl.set('#scene2', { opacity: 1 }, 4)
+      .to('.feature-grid', { opacity: 1, duration: 0.3 }, 4)
+      .fromTo('.feature-card', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out', stagger: 0.15 }, 4.2)
+      // Exit
+      .to('#scene2', { opacity: 0, duration: 0.4 }, 7.5);
+
+    // === SCENE 3: Recipes (8 - 10.5s) ===
+    tl.set('#scene3', { opacity: 1 }, 8)
+      .to('.recipe-row', { opacity: 1, duration: 0.3 }, 8)
+      .fromTo('.recipe-pill', { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: 'back.out(1.5)', stagger: 0.08 }, 8.2)
+      // Exit
+      .to('#scene3', { opacity: 0, duration: 0.3 }, 10);
+
+    // === SCENE 4: Code (10.5 - 13s) ===
+    tl.set('#scene4', { opacity: 1 }, 10.5)
+      .to('.code-block', { opacity: 1, duration: 0.3 }, 10.5)
+      .fromTo('.code-block div', { x: -20, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, stagger: 0.08 }, 10.7)
+      // Exit
+      .to('#scene4', { opacity: 0, duration: 0.4 }, 12.5);
+
+    // === SCENE 5: CTA (13 - 15s) ===
+    tl.set('#scene5', { opacity: 1 }, 13)
+      .fromTo('.cta-text', { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: 'power3.out' }, 13.1)
+      .fromTo('.cta-url', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, 13.6)
+      // Final hold + fade
+      .to('#scene5', { opacity: 0, duration: 0.8 }, 14.2);
+
+    // Reset progress
+    tl.set('#progress', { width: '0%' }, TOTAL);
+
+    window.__timelines = [tl];
+    window.__duration = TOTAL;
+    return tl;
+  }
+
+  build();
+  tl.play();
+
+  window.addEventListener('hf-seek', function(e) {
+    var t = (e && e.detail && e.detail.time != null) ? e.detail.time : 0;
+    tl.time(t);
+    tl.pause();
+  });
+})();
+</script>
+</body>
+</html>
