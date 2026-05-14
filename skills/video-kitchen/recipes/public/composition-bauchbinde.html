@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>FFWD Bauchbinde — Wiener Melange</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  @font-face {
+    font-family: 'WienerMelange';
+    src: url('fonts/WienerMelange_W_Rg.woff2') format('woff2'),
+         url('fonts/WienerMelange_W_Rg.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'WienerMelange';
+    src: url('fonts/WienerMelange_W_Bd.woff2') format('woff2'),
+         url('fonts/WienerMelange_W_Bd.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'WienerMelange';
+    src: url('fonts/WienerMelange_W_ExBd.woff2') format('woff2'),
+         url('fonts/WienerMelange_W_ExBd.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: transparent; overflow: hidden; width: 1920px; height: 1080px; font-family: 'WienerMelange', sans-serif; }
+
+  .bb-wrap { position: absolute; top: 0; left: 0; width: 1920px; height: 1080px; pointer-events: none; }
+
+  #bb-bar {
+    position: absolute;
+    left: 0; top: 350px;
+    height: 220px;
+    background: linear-gradient(90deg, #5b234d 0%, #9f3b5f 55%, #ff5865 100%);
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 50px 0 45px;
+    white-space: nowrap;
+  }
+
+  #bb-name {
+    color: #fff;
+    font-size: 80px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+  }
+
+  #bb-role {
+    color: #fff;
+    font-size: 80px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    line-height: 1.1;
+    margin-top: 0;
+  }
+
+  .bb-config {
+    position: absolute; top: 20px; right: 20px;
+    background: rgba(0,0,0,0.92); border: 1px solid #333;
+    border-radius: 12px; padding: 24px;
+    pointer-events: all; display: none;
+    color: #fff; font-size: 14px;
+    backdrop-filter: blur(12px); z-index: 100;
+  }
+  .bb-config.show { display: block; }
+  .bb-config h3 { margin-bottom: 16px; font-size: 16px; font-weight: 700; }
+  .bb-config label { display: block; margin-bottom: 4px; color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .bb-config input {
+    background: #1a1a1a; border: 1px solid #333; color: #fff;
+    padding: 8px 12px; border-radius: 6px; width: 300px; margin-bottom: 14px;
+    font-family: 'Inter', sans-serif; font-size: 14px;
+  }
+  .bb-config input:focus { outline: none; border-color: #9f3b5f; }
+  .bb-config button {
+    background: linear-gradient(90deg, #5b234d, #ff5865);
+    color: #fff; border: none; padding: 10px 24px;
+    border-radius: 6px; cursor: pointer; font-weight: 700; margin-right: 8px;
+  }
+  .bb-config button.secondary { background: #333; }
+</style>
+</head>
+<body>
+
+<div class="bb-wrap">
+  <div id="bb-bar">
+    <div id="bb-name">Vorname Name</div>
+    <div id="bb-role">Position</div>
+  </div>
+</div>
+
+<!-- Config — press 'E' -->
+<div class="bb-config" id="bb-config">
+  <h3>⚙️ Bauchbinde Einstellungen</h3>
+  <label>Name</label>
+  <input id="cfg-name" value="Vorname Name" />
+  <label>Position / Rolle</label>
+  <input id="cfg-role" value="Position" />
+  <label>Farbe (CSS Gradient)</label>
+  <input id="cfg-color" value="linear-gradient(90deg, #5b234d 0%, #9f3b5f 55%, #ff5865 100%)" />
+  <label>Name Größe (px)</label>
+  <input id="cfg-namesize" type="number" value="48" min="20" max="80" />
+  <label>Role Größe (px)</label>
+  <input id="cfg-rolesize" type="number" value="26" min="14" max="50" />
+  <label>Dauer (Sekunden)</label>
+  <input id="cfg-duration" type="number" value="5" min="2" max="20" />
+  <button onclick="applyConfig()">Anwenden</button>
+  <button class="secondary" onclick="replayAnimation()">▶ Replay</button>
+</div>
+
+<script>
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const qName = params.get('name');
+  const qRole = params.get('role');
+  const qColor = params.get('color');
+  const qDuration = parseFloat(params.get('duration')) || 5;
+
+  if (qName) { document.getElementById('bb-name').textContent = qName; document.getElementById('cfg-name').value = qName; }
+  if (qRole) { document.getElementById('bb-role').textContent = qRole; document.getElementById('cfg-role').value = qRole; }
+  if (qColor) { document.getElementById('bb-bar').style.background = qColor; document.getElementById('cfg-color').value = qColor; }
+
+  let tl;
+  let totalDuration = qDuration;
+  const bar = document.getElementById('bb-bar');
+
+  function measureBarWidth() {
+    const orig = bar.style.cssText;
+    bar.style.cssText = 'position:absolute;left:0;top:350px;height:220px;display:inline-flex;flex-direction:column;justify-content:center;padding:0 50px 0 45px;opacity:1;white-space:nowrap;width:auto;background:' + (bar.style.background || 'inherit');
+    const w = bar.scrollWidth;
+    bar.style.cssText = orig;
+    return w;
+  }
+
+  function buildTimeline() {
+    if (tl) { tl.kill(); }
+    tl = gsap.timeline({ paused: true });
+
+    const targetWidth = measureBarWidth();
+    const outStart = totalDuration - 0.8;
+
+    gsap.set('#bb-bar', { width: 0, opacity: 1, overflow: 'hidden' });
+    gsap.set('#bb-name', { opacity: 0 });
+    gsap.set('#bb-role', { opacity: 0 });
+
+    // IN: crop open left → right
+    tl.to('#bb-bar', {
+      width: targetWidth,
+      duration: 0.5,
+      ease: 'power2.out'
+    }, 0.3)
+    .to('#bb-name', { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0.45)
+    .to('#bb-role', { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0.6);
+
+    // OUT: crop closed right → left
+    tl.to('#bb-role', { opacity: 0, duration: 0.15 }, outStart)
+    .to('#bb-name', { opacity: 0, duration: 0.15 }, outStart + 0.04)
+    .to('#bb-bar', {
+      width: 0,
+      duration: 0.45,
+      ease: 'power3.in'
+    }, outStart + 0.08);
+
+    window.__timelines = [tl];
+    window.__duration = totalDuration;
+    return tl;
+  }
+
+  buildTimeline();
+  tl.play();
+
+  window.addEventListener('hf-seek', function(e) {
+    var t = (e && e.detail && e.detail.time != null) ? e.detail.time : 0;
+    tl.time(t);
+    tl.pause();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'e' || e.key === 'E') {
+      document.getElementById('bb-config').classList.toggle('show');
+    }
+  });
+
+  window.applyConfig = function() {
+    document.getElementById('bb-name').textContent = document.getElementById('cfg-name').value;
+    document.getElementById('bb-role').textContent = document.getElementById('cfg-role').value;
+    bar.style.background = document.getElementById('cfg-color').value;
+    document.getElementById('bb-name').style.fontSize = document.getElementById('cfg-namesize').value + 'px';
+    document.getElementById('bb-role').style.fontSize = document.getElementById('cfg-rolesize').value + 'px';
+    totalDuration = parseFloat(document.getElementById('cfg-duration').value) || 5;
+
+    gsap.set(['#bb-bar','#bb-name','#bb-role'], { clearProps: 'all' });
+    buildTimeline();
+    tl.play();
+  };
+
+  window.replayAnimation = function() {
+    gsap.set(['#bb-bar','#bb-name','#bb-role'], { clearProps: 'all' });
+    buildTimeline();
+    tl.play();
+  };
+})();
+</script>
+</body>
+</html>

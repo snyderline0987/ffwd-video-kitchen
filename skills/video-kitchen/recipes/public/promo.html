@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Kitchen Box - Your Video Agent in a Box</title>
+    <meta name="description" content="Your video agent in a box. Plug in footage, get broadcast-ready video. 100% local AI video production powered by OpenClaw.">
+    <meta name="keywords" content="video production, AI agent, Docker, OpenClaw, Hyperframes, video automation, film editing">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Video Kitchen Box - Your Video Agent in a Box">
+    <meta property="og:description" content="Plug in footage, get broadcast-ready video. 100% local AI video production that ships in a Docker container.">
+    <meta property="og:image" content="https://video-kitchen-box.og-image.com/social-preview.jpg">
+    <meta property="og:url" content="https://video-kitchen-box.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Video Kitchen Box - Your Video Agent in a Box">
+    <meta name="twitter:description" content="Plug in footage, get broadcast-ready video. 100% local AI video production.">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-base: #0a0a0a;
+            --color-base-light: #1a1a1a;
+            --color-accent: #e50914;
+            --color-accent-hover: #ff1f2a;
+            --color-copper: #b87333;
+            --color-wood: #8B4513;
+            --color-steel: #71797E;
+            --color-text: #ffffff;
+            --color-text-muted: #a0a0a0;
+            --color-border: #2a2a2a;
+            --color-card: #151515;
+            --color-card-hover: #1f1f1f;
+            
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            
+            --gradient-steel: linear-gradient(135deg, #71797E 0%, #4a4f52 100%);
+            --gradient-copper: linear-gradient(135deg, #b87333 0%, #8B4513 100%);
+            --gradient-accent: linear-gradient(135deg, #e50914 0%, #b80710 100%);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-base);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Utility */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            padding: 5rem 0;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-copper) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-accent);
+            color: white;
+            box-shadow: 0 4px 20px rgba(229, 9, 20, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(229, 9, 20, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-text);
+            border: 2px solid var(--color-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(ellipse at top, rgba(229, 9, 20, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom right, rgba(184, 115, 51, 0.1) 0%, transparent 40%);
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(229, 9, 20, 0.1);
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--color-text-muted);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .hero-tagline .highlight {
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        /* Animated knife icon */
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            animation: knifeChop 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes knifeChop {
+            0%, 100% { transform: rotate(-15deg) translateY(0); }
+            50% { transform: rotate(15deg) translateY(-10px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating elements */
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .floating-item {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-item:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .floating-item:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; }
+        .floating-item:nth-child(3) { top: 80%; left: 20%; animation-delay: 4s; }
+        .floating-item:nth-child(4) { top: 30%; left: 70%; animation-delay: 1s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--color-text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background: linear-gradient(180deg, transparent 0%, rgba(229, 9, 20, 0.03) 50%, transparent 100%);
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .step-card {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-accent);
+            border-radius: 12px 12px 0 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--color-accent);
+            box-shadow: 0 10px 40px rgba(229, 9, 20, 0.1);
+        }
+
+        .step-card:hover::before {
+            opacity: 1;
+        }
+
+        .step-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .step-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-card p {
+            color: var(--color-text-muted);
+        }
+
+        /* Recipe Menu */
+        .recipe-menu {
+            background: var(--color-base-light);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .recipe-card {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--color-accent);
+            box-shadow: 0 15px 50px rgba(229, 9, 20, 0.15);
+        }
+
+        .recipe-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(229, 9, 20, 0.1) 0%, rgba(184, 115, 51, 0.05) 100%);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .recipe-header h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .recipe-header .tagline {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+        }
+
+        .recipe-body {
+            padding: 1.5rem;
+        }
+
+        .recipe-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        .meta-item .icon {
+            font-size: 1rem;
+        }
+
+        .spice-level {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .spice-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-border);
+            transition: all 0.3s ease;
+        }
+
+        .spice-dot.active {
+            background: var(--color-accent);
+        }
+
+        .recipe-description {
+            font-size: 0.9375rem;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        /* The Pantry */
+        .pantry {
+            background: linear-gradient(180deg, transparent 0%, rgba(184, 115, 51, 0.03) 50%, transparent 100%);
+        }
+
+        .pantry-shelf {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .jar-card {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .jar-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--color-copper);
+        }
+
+        .jar-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .jar-card h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .jar-card p {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        .jar-ingredients {
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .ingredient-tag {
+            padding: 0.25rem 0.75rem;
+            background: rgba(184, 115, 51, 0.1);
+            border: 1px solid rgba(184, 115, 51, 0.2);
+            border-radius: 50px;
+            font-size: 0.75rem;
+        }
+
+        /* Kitchen Rules */
+        .kitchen-rules {
+            background: var(--color-base-light);
+        }
+
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .rule-card {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .rule-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--color-accent);
+        }
+
+        .rule-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .rule-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--color-accent);
+        }
+
+        .rule-card .subtitle {
+            font-size: 0.875rem;
+            color: var(--color-copper);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .rule-card p {
+            font-size: 0.9375rem;
+            color: var(--color-text-muted);
+            line-height: 1.7;
+        }
+
+        /* Get Cooking */
+        .get-cooking {
+            text-align: center;
+            padding: 8rem 0;
+            background: radial-gradient(ellipse at center, rgba(229, 9, 20, 0.1) 0%, transparent 70%);
+        }
+
+        .get-cooking h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .get-cooking p {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .command-box {
+            background: #000;
+            border: 1px solid var(--color-accent);
+            border-radius: 8px;
+            padding: 2rem 3rem;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .command-box::before {
+            content: '$';
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-accent);
+            font-family: monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .command-box code {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.25rem;
+            color: var(--color-text);
+            display: block;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--color-accent);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--color-accent-hover);
+        }
+
+        .copy-btn.copied {
+            background: #22c55e;
+        }
+
+        .cta-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+                max-width: 300px;
+            }
+
+            .command-box {
+                padding: 1.5rem;
+            }
+
+            .command-box code {
+                font-size: 1rem;
+                padding-left: 2rem;
+            }
+
+            .command-box::before {
+                font-size: 1.25rem;
+                left: 1rem;
+            }
+
+            .copy-btn {
+                top: 1rem;
+                right: 1rem;
+                transform: none;
+            }
+
+            .section {
+                padding: 3rem 0;
+            }
+        }
+
+        /* Scroll animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="floating-item">🔪</div>
+            <div class="floating-item">⏱️</div>
+            <div class="floating-item">🎬</div>
+            <div class="floating-item">📽️</div>
+        </div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-icon">👨‍🍳🎥</div>
+                <div class="hero-badge">🚀 Ships in a Docker container</div>
+                <h1>Video Kitchen Box</h1>
+                <p class="hero-tagline">
+                    Your <span class="highlight">video agent in a box</span>. 
+                    Plug in footage, get <span class="highlight">broadcast-ready video</span>.
+                </p>
+                <div class="hero-actions">
+                    <a href="#get-cooking" class="btn btn-primary">
+                        🍳 Get Cooking
+                    </a>
+                    <a href="#how-it-works" class="btn btn-secondary">
+                        📖 How It Works
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>🔌 The Workflow</h2>
+                <p>From raw ingredients to Michelin-star video in three easy steps</p>
+            </div>
+            
+            <div class="steps">
+                <div class="step-card reveal">
+                    <div class="step-icon">📥</div>
+                    <h3>1. Plug In</h3>
+                    <p><code>docker-compose up -d</code> starts the agent + dashboard. Your footage stays local — no uploads, no cloud processing.</p>
+                </div>
+                
+                <div class="step-card reveal">
+                    <div class="step-icon">🤖</div>
+                    <h3>2. Agent Cooks</h3>
+                    <p>Tell the agent what you want: "Make a 30s news overview from this article." It picks the recipe, applies film theory, generates the composition.</p>
+                </div>
+                
+                <div class="step-card reveal">
+                    <div class="step-icon">🍽️</div>
+                    <h3>3. Serve Video</h3>
+                    <p>Preview, tweak, render — all locally. Broadcast-ready output in minutes, not hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recipe Menu -->
+    <section class="section recipe-menu" id="recipes">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>📋 Recipe Menu</h2>
+                <p>Six curated video formats. Choose your flavor, adjust the spice level.</p>
+            </div>
+            
+            <div class="menu-grid">
+                <div class="recipe-card reveal">
+                    <div class="recipe-header">
+                        <h3>📰 News</h3>
+                        <p class="tagline">"Breaking news, expert cuts"</p>
+                    </div>
+                    <div class="recipe-body">
+                        <div class="recipe-meta">
+                            <div class="meta-item">
+                                <span class="icon">⏱️</span>
+                                <span>30-90s</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="icon">🌶️</span>
+                                <div class="spice-level">
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot"></span>
+                                    <span class="spice-dot"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="recipe-description">Perfect for news briefs, article summaries, and broadcast updates. Clean, authoritative cuts with professional motion graphics.</p>
+                    </div>
+                </div>
+                
+                <div class="recipe-card reveal">
+                    <div class="recipe-header">
+                        <h3>📺 On-Air Promo</h3>
+                        <p class="tagline">"High energy, big impact"</p>
+                    </div>
+                    <div class="recipe-body">
+                        <div class="recipe-meta">
+                            <div class="meta-item">
+                                <span class="icon">⏱️</span>
+                                <span>15-60s</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="icon">🌶️</span>
+                                <div class="spice-level">
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="recipe-description">Punchy teasers, show promos, and event trailers. Fast cuts, dynamic transitions, eye-catching motion design.</p>
+                    </div>
+                </div>
+                
+                <div class="recipe-card reveal">
+                    <div class="recipe-header">
+                        <h3>📱 Social Clip</h3>
+                        <p class="tagline">"Scroll-stopping gold"</p>
+                    </div>
+                    <div class="recipe-body">
+                        <div class="recipe-meta">
+                            <div class="meta-item">
+                                <span class="icon">⏱️</span>
+                                <span>15-30s</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="icon">🌶️</span>
+                                <div class="spice-level">
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot"></span>
+                                    <span class="spice-dot"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="recipe-description">Optimized for TikTok, Reels, and Shorts. Vertical format, snappy editing, trendy transitions.</p>
+                    </div>
+                </div>
+                
+                <div class="recipe-card reveal">
+                    <div class="recipe-header">
+                        <h3>🎨 Gen AI Remake</h3>
+                        <p class="tagline">"AI meets Auteur"</p>
+                    </div>
+                    <div class="recipe-body">
+                        <div class="recipe-meta">
+                            <div class="meta-item">
+                                <span class="icon">⏱️</span>
+                                <span>30-120s</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="icon">🌶️</span>
+                                <div class="spice-level">
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="recipe-description">Transform existing footage into AI-enhanced masterpieces. Style transfer, upscaling, creative re-imagining.</p>
+                    </div>
+                </div>
+                
+                <div class="recipe-card reveal">
+                    <div class="recipe-header">
+                        <h3>😂 Meme React</h3>
+                        <p class="tagline">"Funny at scale"</p>
+                    </div>
+                    <div class="recipe-body">
+                        <div class="recipe-meta">
+                            <div class="meta-item">
+                                <span class="icon">⏱️</span>
+                                <span>10-30s</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="icon">🌶️</span>
+                                <div class="spice-level">
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot"></span>
+                                    <span class="spice-dot"></span>
+                                    <span class="spice-dot"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="recipe-description">React videos, meme compilations, viral content. Fast turnaround, built-in meme templates, caption overlays.</p>
+                    </div>
+                </div>
+                
+                <div class="recipe-card reveal">
+                    <div class="recipe-header">
+                        <h3>🛍️ Product Landing</h3>
+                        <p class="tagline">"Showcase, don't tell"</p>
+                    </div>
+                    <div class="recipe-body">
+                        <div class="recipe-meta">
+                            <div class="meta-item">
+                                <span class="icon">⏱️</span>
+                                <span>60-180s</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="icon">🌶️</span>
+                                <div class="spice-level">
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot active"></span>
+                                    <span class="spice-dot active"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="recipe-description">Product showcases, explainer videos, commercials. Elegant pacing, highlight features, cinematic quality.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Pantry -->
+    <section class="section pantry" id="pantry">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>🧺 The Pantry</h2>
+                <p>Everything you need in the box. No subscription, no cloud fees.</p>
+            </div>
+            
+            <div class="pantry-shelf">
+                <div class="jar-card reveal">
+                    <div class="jar-icon">🧠</div>
+                    <h3>OpenClaw Agent</h3>
+                    <p>AI chef with film school pedigree</p>
+                    <div class="jar-ingredients">
+                        <span class="ingredient-tag">Film Theory</span>
+                        <span class="ingredient-tag">Context Aware</span>
+                        <span class="ingredient-tag">Task Orchestration</span>
+                    </div>
+                </div>
+                
+                <div class="jar-card reveal">
+                    <div class="jar-icon">🎨</div>
+                    <h3>Hyperframes</h3>
+                    <p>HTML-based compositions</p>
+                    <div class="jar-ingredients">
+                        <span class="ingredient-tag">GSAP Animations</span>
+                        <span class="ingredient-tag">Motion Templates</span>
+                        <span class="ingredient-tag">Openers</span>
+                    </div>
+                </div>
+                
+                <div class="jar-card reveal">
+                    <div class="jar-icon">📦</div>
+                    <h3>Docker Bundle</h3>
+                    <p>Ship it anywhere</p>
+                    <div class="jar-ingredients">
+                        <span class="ingredient-tag">Express Dashboard</span>
+                        <span class="ingredient-tag">Preview Studio</span>
+                        <span class="ingredient-tag">One-command Deploy</span>
+                    </div>
+                </div>
+                
+                <div class="jar-card reveal">
+                    <div class="jar-icon">🎭</div>
+                    <h3>Motion Library</h3>
+                    <p>Ready-to-use animations</p>
+                    <div class="jar-ingredients">
+                        <span class="ingredient-tag">Lower Thirds</span>
+                        <span class="ingredient-tag">CI Elements</span>
+                        <span class="ingredient-tag">Transitions</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kitchen Rules -->
+    <section class="section kitchen-rules" id="rules">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>📜 Kitchen Rules</h2>
+                <p>The secret sauce: Four cooking methods for cinematic excellence</p>
+            </div>
+            
+            <div class="rules-grid">
+                <div class="rule-card reveal">
+                    <div class="rule-icon">🔥</div>
+                    <h3>Grill</h3>
+                    <p class="subtitle">Edward Dmytryk's Seven Rules</p>
+                    <p>Quick cuts, clear continuity, precise timing. Perfect for news and promo content that needs to land hard.</p>
+                </div>
+                
+                <div class="rule-card reveal">
+                    <div class="rule-icon">💥</div>
+                    <h3>Flambé</h3>
+                    <p class="subtitle">Eisenstein's Montage Theory</p>
+                    <p>Collision of ideas, emotional shock, dramatic juxtaposition. For when you need to make a statement.</p>
+                </div>
+                
+                <div class="rule-card reveal">
+                    <div class="rule-icon">🍲</div>
+                    <h3>Slow Cook</h3>
+                    <p class="subtitle">Menke / Tarantino Style</p>
+                    <p>Dialogue-driven, tension building, timing is everything. The art of the hold and the perfect punchline.</p>
+                </div>
+                
+                <div class="rule-card reveal">
+                    <div class="rule-icon">🥘</div>
+                    <h3>Sous Vide</h3>
+                    <p class="subtitle">Murch's Rule of Six</p>
+                    <p>Emotion first, precision temperature control. Every cut serves the feeling, not the timeline.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Get Cooking -->
+    <section class="get-cooking" id="get-cooking">
+        <div class="container">
+            <h2 class="reveal">Ready to <span class="gradient-text">Get Cooking?</span></h2>
+            <p class="reveal">One command. That's it. Your video kitchen is ready.</p>
+            
+            <div class="command-box reveal">
+                <code>docker-compose up -d</code>
+                <button class="copy-btn" onclick="copyCommand()">Copy</button>
+            </div>
+            
+            <div class="cta-actions reveal">
+                <a href="https://github.com/video-kitchen-box/video-kitchen-box" class="btn btn-primary">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    View on GitHub
+                </a>
+                <a href="https://app.netlify.com/start/deploy?repository=https://github.com/video-kitchen-box/video-kitchen-box" class="btn btn-secondary">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    Deploy to Netlify
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Built with ❤️ by <a href="https://openclaw.dev">OpenClaw</a> — Your Video Agent in a Box</p>
+        </div>
+    </footer>
+
+    <!-- GSAP for Hero Animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // GSAP Hero Animation
+        gsap.from(".hero-icon", {
+            duration: 1.5,
+            scale: 0,
+            rotation: -180,
+            ease: "elastic.out(1, 0.5)",
+            delay: 0.3
+        });
+
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', reveal);
+        reveal(); // Initial check
+
+        // Copy Command Function
+        function copyCommand() {
+            const command = 'docker-compose up -d';
+            navigator.clipboard.writeText(command).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

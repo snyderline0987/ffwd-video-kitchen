@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>FFWD Bauchbinde — Motion Template</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: transparent; overflow: hidden; width: 1920px; height: 1080px; font-family: 'Inter', sans-serif; }
+
+  .bb-wrap { position: absolute; top: 0; left: 0; width: 1920px; height: 1080px; pointer-events: none; }
+
+  /* Main bar — gradient option or solid */
+  #bb-bar {
+    position: absolute;
+    left: 0; bottom: 140px;
+    width: 800px; height: 90px;
+    background: linear-gradient(135deg, #e50914 0%, #b8060f 100%);
+    clip-path: polygon(0 0, 100% 0, 97% 100%, 0% 100%);
+    opacity: 0;
+  }
+
+  /* Role/title bar below */
+  #bb-role-bar {
+    position: absolute;
+    left: 0; bottom: 85px;
+    width: 600px; height: 55px;
+    background: rgba(10, 10, 10, 0.92);
+    clip-path: polygon(0 0, 100% 0, 97% 100%, 0% 100%);
+    opacity: 0;
+  }
+
+  /* Name text */
+  #bb-name {
+    position: absolute;
+    left: 40px; bottom: 157px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0;
+  }
+
+  /* Role text */
+  #bb-role {
+    position: absolute;
+    left: 40px; bottom: 98px;
+    color: rgba(255,255,255,0.75);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    opacity: 0;
+  }
+
+  /* Top accent line */
+  #bb-accent {
+    position: absolute;
+    left: 0; bottom: 230px;
+    width: 0; height: 3px;
+    background: #e50914;
+    opacity: 0;
+  }
+
+  /* Optional: small logo/icon area */
+  #bb-icon {
+    position: absolute;
+    left: 720px; bottom: 150px;
+    width: 50px; height: 50px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+  }
+  #bb-icon svg { width: 28px; height: 28px; fill: #fff; }
+
+  /* Config panel (hidden in production, shown for editing) */
+  .bb-config {
+    position: absolute; top: 20px; right: 20px;
+    background: rgba(0,0,0,0.85); border: 1px solid #333;
+    border-radius: 12px; padding: 20px;
+    pointer-events: all; display: none;
+    color: #fff; font-size: 14px;
+    backdrop-filter: blur(10px);
+  }
+  .bb-config.show { display: block; }
+  .bb-config label { display: block; margin-bottom: 4px; color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .bb-config input { 
+    background: #1a1a1a; border: 1px solid #333; color: #fff; 
+    padding: 8px 12px; border-radius: 6px; width: 280px; margin-bottom: 12px;
+    font-family: 'Inter', sans-serif; font-size: 14px;
+  }
+  .bb-config button {
+    background: #e50914; color: #fff; border: none; padding: 8px 20px;
+    border-radius: 6px; cursor: pointer; font-weight: 700; margin-right: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bb-wrap">
+  <!-- Accent line -->
+  <div id="bb-accent"></div>
+  
+  <!-- Main name bar -->
+  <div id="bb-bar"></div>
+  
+  <!-- Name -->
+  <div id="bb-name">MAX MUSTERMANN</div>
+  
+  <!-- Role bar -->
+  <div id="bb-role-bar"></div>
+  
+  <!-- Role -->
+  <div id="bb-role">Beispiel Amt</div>
+
+  <!-- Optional icon -->
+  <div id="bb-icon">
+    <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+  </div>
+</div>
+
+<!-- Config panel — press 'E' to toggle -->
+<div class="bb-config" id="bb-config">
+  <h3 style="margin-bottom:16px; font-size:16px;">⚙️ Bauchbinde Settings</h3>
+  <label>Name</label>
+  <input id="cfg-name" value="MAX MUSTERMANN" />
+  <label>Role / Title</label>
+  <input id="cfg-role" value="Beispiel Amt" />
+  <label>Bar Color (hex or gradient)</label>
+  <input id="cfg-color" value="#e50914" />
+  <label>Animation Duration (seconds)</label>
+  <input id="cfg-duration" type="number" value="5" min="3" max="15" />
+  <button onclick="applyConfig()">Apply</button>
+  <button onclick="replayAnimation()" style="background:#333;">▶ Replay</button>
+</div>
+
+<script>
+(function() {
+  // Read query params for dynamic values
+  const params = new URLSearchParams(window.location.search);
+  const qName = params.get('name');
+  const qRole = params.get('role');
+  const qColor = params.get('color');
+  const qDuration = parseFloat(params.get('duration')) || 5;
+
+  if (qName) { document.getElementById('bb-name').textContent = qName; document.getElementById('cfg-name').value = qName; }
+  if (qRole) { document.getElementById('bb-role').textContent = qRole; document.getElementById('cfg-role').value = qRole; }
+  if (qColor) {
+    document.getElementById('bb-bar').style.background = qColor;
+    document.getElementById('bb-accent').style.background = qColor;
+    document.getElementById('cfg-color').value = qColor;
+  }
+
+  let tl;
+  let totalDuration = qDuration;
+
+  function buildTimeline() {
+    if (tl) { tl.kill(); }
+    tl = gsap.timeline({ paused: true });
+    
+    const holdEnd = totalDuration - 1.2;
+
+    // === IN (0.3 - 0.9s): Slide from left with skew ===
+    tl.fromTo('#bb-accent', 
+      { width: 0, opacity: 0 }, 
+      { width: 800, opacity: 1, duration: 0.5, ease: 'power3.out' }, 0.3
+    )
+    .fromTo('#bb-bar', 
+      { x: -900, opacity: 0, skewX: 12 }, 
+      { x: 0, opacity: 1, skewX: 0, duration: 0.55, ease: 'power4.out' }, 0.35
+    )
+    .fromTo('#bb-name', 
+      { x: -900, opacity: 0 }, 
+      { x: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }, 0.45
+    )
+    .fromTo('#bb-role-bar', 
+      { x: -900, opacity: 0, skewX: 12 }, 
+      { x: 0, opacity: 1, skewX: 0, duration: 0.55, ease: 'power4.out' }, 0.5
+    )
+    .fromTo('#bb-role', 
+      { x: -900, opacity: 0 }, 
+      { x: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }, 0.6
+    )
+    .fromTo('#bb-icon', 
+      { scale: 0, opacity: 0, rotation: -90 }, 
+      { scale: 1, opacity: 0.6, rotation: 0, duration: 0.4, ease: 'back.out(2)' }, 0.75
+    );
+
+    // === HOLD: subtle pulse on accent line ===
+    tl.to('#bb-accent', { opacity: 0.5, duration: 0.3, yoyo: true, repeat: 1, ease: 'sine.inOut' }, holdEnd - 1);
+
+    // === OUT: Slide back left with reverse skew ===
+    tl.to('#bb-icon', 
+      { scale: 0, opacity: 0, rotation: 90, duration: 0.3, ease: 'power3.in' }, holdEnd
+    )
+    .to('#bb-role', 
+      { x: -900, opacity: 0, duration: 0.35, ease: 'power3.in' }, holdEnd + 0.05
+    )
+    .to('#bb-role-bar', 
+      { x: -900, opacity: 0, skewX: -12, duration: 0.4, ease: 'power3.in' }, holdEnd + 0.08
+    )
+    .to('#bb-name', 
+      { x: -900, opacity: 0, duration: 0.35, ease: 'power3.in' }, holdEnd + 0.12
+    )
+    .to('#bb-bar', 
+      { x: -900, opacity: 0, skewX: -12, duration: 0.4, ease: 'power3.in' }, holdEnd + 0.15
+    )
+    .to('#bb-accent', 
+      { width: 0, opacity: 0, duration: 0.35, ease: 'power3.in' }, holdEnd + 0.18
+    );
+
+    window.__timelines = [tl];
+    window.__duration = totalDuration;
+    return tl;
+  }
+
+  buildTimeline();
+  tl.play();
+
+  // hf-seek support for Hyperframes
+  window.addEventListener('hf-seek', function(e) {
+    var t = (e && e.detail && e.detail.time != null) ? e.detail.time : 0;
+    tl.time(t);
+    tl.pause();
+  });
+
+  // Config panel toggle (press 'E')
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'e' || e.key === 'E') {
+      document.getElementById('bb-config').classList.toggle('show');
+    }
+  });
+
+  // Apply config
+  window.applyConfig = function() {
+    const name = document.getElementById('cfg-name').value;
+    const role = document.getElementById('cfg-role').value;
+    const color = document.getElementById('cfg-color').value;
+    const dur = parseFloat(document.getElementById('cfg-duration').value) || 5;
+
+    document.getElementById('bb-name').textContent = name;
+    document.getElementById('bb-role').textContent = role;
+    document.getElementById('bb-bar').style.background = color;
+    document.getElementById('bb-accent').style.background = color;
+    totalDuration = dur;
+
+    // Reset and rebuild
+    gsap.set(['#bb-bar','#bb-name','#bb-role-bar','#bb-role','#bb-accent','#bb-icon'], { clearProps: 'all' });
+    buildTimeline();
+    tl.play();
+  };
+
+  window.replayAnimation = function() {
+    gsap.set(['#bb-bar','#bb-name','#bb-role-bar','#bb-role','#bb-accent','#bb-icon'], { clearProps: 'all' });
+    buildTimeline();
+    tl.play();
+  };
+})();
+</script>
+</body>
+</html>

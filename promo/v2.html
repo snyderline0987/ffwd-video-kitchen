@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Kitchen Box - Your Video Agent in a Box</title>
+    <meta name="description" content="Feed it footage. Get broadcast-ready video. 100% local. Docker-ready video production studio with AI agent.">
+    <meta property="og:title" content="Video Kitchen Box - Your Video Agent in a Box">
+    <meta property="og:description" content="Feed it footage. Get broadcast-ready video. 100% local. Docker-ready video production studio with AI agent.">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-primary: #0e0e12;
+            --bg-card: #16161d;
+            --border-color: #222233;
+            --text-primary: #ffffff;
+            --text-secondary: #999999;
+            --accent-start: #e50914;
+            --accent-end: #ff6b35;
+            --accent-purple: #8b5cf6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Badge pill */
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 16px;
+            background: rgba(229, 9, 20, 0.1);
+            border: 1px solid rgba(229, 9, 20, 0.2);
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--accent-start);
+            margin-bottom: 24px;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(229, 9, 20, 0.3);
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 28px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-card);
+            border-color: var(--accent-start);
+        }
+
+        /* Section headers */
+        .section-header {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: #1a1a24;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #e2e8f0;
+            overflow-x: auto;
+        }
+
+        /* Feature cards */
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(229, 9, 20, 0.3);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 20px;
+            color: var(--accent-start);
+        }
+
+        /* Steps */
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* Table */
+        .recipes-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .recipes-table th,
+        .recipes-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .recipes-table th {
+            background: #1a1a24;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+        }
+
+        .recipes-table tr:nth-child(even) {
+            background: #1a1a24;
+        }
+
+        .recipes-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Tech stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .tech-stack span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tech-stack span::after {
+            content: '•';
+            color: var(--border-color);
+            margin-left: 24px;
+        }
+
+        .tech-stack span:last-child::after {
+            display: none;
+        }
+
+        /* Animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Gradient shimmer */
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .gradient-shimmer {
+            background: linear-gradient(
+                90deg,
+                var(--accent-start) 0%,
+                var(--accent-end) 50%,
+                var(--accent-start) 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 4s linear infinite;
+        }
+
+        /* Connector lines for steps */
+        .steps-container {
+            position: relative;
+        }
+
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            height: 1px;
+            background: linear-gradient(90deg, var(--border-color), transparent, var(--border-color));
+            z-index: 0;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-container::before {
+                display: none;
+            }
+
+            .steps-container {
+                flex-direction: column;
+            }
+
+            .step {
+                gap: 16px;
+            }
+
+            .recipes-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .btn-primary,
+            .btn-outline {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="py-24 lg:py-32">
+        <div class="container text-center">
+            <div class="fade-in-up">
+                <div class="badge-pill">Open Source • Docker • AI Agent</div>
+            </div>
+            <h1 class="fade-in-up text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                Your video agent <span class="gradient-shimmer">in a box.</span>
+            </h1>
+            <p class="fade-in-up text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+                Feed it footage. Get broadcast-ready video. 100% local.
+            </p>
+            <div class="fade-in-up flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                <a href="#get-started" class="btn-primary">Get Started</a>
+                <a href="https://github.com" target="_blank" class="btn-outline">View on GitHub</a>
+            </div>
+            <div class="fade-in-up max-w-lg mx-auto">
+                <div class="code-block">
+                    <span style="color: #8b5cf6">$</span> docker-compose up -d
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-24 border-t border-[#222233]">
+        <div class="container">
+            <div class="fade-in-up section-header">Features</div>
+            <h2 class="fade-in-up text-3xl md:text-4xl font-bold mb-16">
+                Everything you need to produce video.
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Feature 1 -->
+                <div class="fade-in-up feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M15 10l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M4 4v7a4 4 0 004 4h12" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold mb-2">Film Theory Engine</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Every cut follows rules. Murch, Dmytryk, Eisenstein, Menke.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="fade-in-up feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="3" y="3" width="18" height="18" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 3v18" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M15 3v18" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 9h18" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 15h18" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold mb-2">6 Recipe Formats</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">News, Promo, Social, AI Remake, Meme, Product.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="fade-in-up feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold mb-2">Motion Templates</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">GSAP-powered openers, lower thirds, CI elements.</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="fade-in-up feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold mb-2">100% Local</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">No cloud uploads. Your footage stays on your machine.</p>
+                </div>
+                <!-- Feature 5 -->
+                <div class="fade-in-up feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold mb-2">Modular Recipes</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Add/remove folders. Dashboard auto-discovers.</p>
+                </div>
+                <!-- Feature 6 -->
+                <div class="fade-in-up feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 12h18" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 21h8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 17v4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 12l5-5 5 5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold mb-2">Docker Ready</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">One command to full video production studio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-24 border-t border-[#222233]">
+        <div class="container">
+            <div class="fade-in-up section-header">How It Works</div>
+            <h2 class="fade-in-up text-3xl md:text-4xl font-bold mb-16">
+                Three steps to production.
+            </h2>
+            <div class="fade-in-up steps-container flex flex-col md:flex-row gap-8 md:gap-12 relative z-10">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <div class="code-block inline-block mb-2">
+                            docker-compose up -d
+                        </div>
+                        <p class="text-gray-400 text-sm">Agent + Dashboard running</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <div class="text-white font-mono text-sm mb-2">Tell the agent what you need</div>
+                        <p class="text-gray-400 text-sm">"Make a 30s news clip from this article"</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <div class="text-white font-semibold text-sm mb-2">Preview, tweak, render</div>
+                        <p class="text-gray-400 text-sm">All locally</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recipes Section -->
+    <section class="py-24 border-t border-[#222233]">
+        <div class="container">
+            <div class="fade-in-up section-header">Recipes</div>
+            <h2 class="fade-in-up text-3xl md:text-4xl font-bold mb-16">
+                Ready-made formats for any use case.
+            </h2>
+            <div class="fade-in-up">
+                <table class="recipes-table">
+                    <thead>
+                        <tr>
+                            <th>Recipe</th>
+                            <th>Ratio</th>
+                            <th>Duration</th>
+                            <th>Theory</th>
+                            <th>Style</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-medium text-white">News</td>
+                            <td>16:9</td>
+                            <td>30-60s</td>
+                            <td>Journalistic pacing</td>
+                            <td>Broadcast, info-driven</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-white">Promo</td>
+                            <td>16:9 / 9:16</td>
+                            <td>15-30s</td>
+                            <td>Emotion-first cuts</td>
+                            <td>Punchy, high-energy</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-white">Social</td>
+                            <td>9:16 / 1:1</td>
+                            <td>15-60s</td>
+                            <td>Attention hooks</td>
+                            <td>Trend-driven, viral</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-white">AI Remake</td>
+                            <td>16:9</td>
+                            <td>Variable</td>
+                            <td>Style emulation</td>
+                            <td>Director signature</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-white">Meme</td>
+                            <td>9:16 / 1:1</td>
+                            <td>5-15s</td>
+                            <td>Timing precision</td>
+                            <td>Comedy, reaction</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-white">Product</td>
+                            <td>16:9 / 9:16</td>
+                            <td>15-30s</td>
+                            <td>Feature focus</td>
+                            <td>Clean, professional</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section class="py-24 border-t border-[#222233]">
+        <div class="container">
+            <div class="fade-in-up section-header">Tech Stack</div>
+            <h2 class="fade-in-up text-3xl md:text-4xl font-bold mb-12 text-center">
+                Built with modern tools.
+            </h2>
+            <div class="fade-in-up tech-stack">
+                <span>OpenClaw</span>
+                <span>Hyperframes</span>
+                <span>GSAP</span>
+                <span>Express</span>
+                <span>Docker</span>
+                <span>Tailwind CSS</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="get-started" class="py-24 border-t border-[#222233]">
+        <div class="container text-center">
+            <div class="fade-in-up">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-8">
+                    Start cooking.
+                </h2>
+                <p class="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
+                    Get your video production studio running in seconds.
+                </p>
+            </div>
+            <div class="fade-in-up max-w-lg mx-auto mb-8">
+                <div class="code-block">
+                    <span style="color: #8b5cf6">$</span> docker-compose up -d
+                </div>
+            </div>
+            <div class="fade-in-up">
+                <a href="https://github.com" target="_blank" class="btn-outline">
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Made with 🎬 by FFWD</p>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            const fadeElements = document.querySelectorAll('.fade-in-up');
+            fadeElements.forEach(el => observer.observe(el));
+
+            // Copy code block on click
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                block.style.cursor = 'pointer';
+                block.title = 'Click to copy';
+
+                block.addEventListener('click', async () => {
+                    const code = block.textContent.replace('$ ', '');
+                    try {
+                        await navigator.clipboard.writeText(code);
+                        const originalText = block.textContent;
+                        block.innerHTML = '<span style="color: #22c55e">✓ Copied!</span>';
+                        setTimeout(() => {
+                            block.innerHTML = originalText;
+                        }, 1500);
+                    } catch (err) {
+                        console.error('Failed to copy:', err);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
