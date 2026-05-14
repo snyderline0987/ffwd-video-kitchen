@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1920,height=1080">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FFWD Bauchbinde — Wiener Melange</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
@@ -11,72 +11,104 @@
     src: url('fonts/WienerMelange_W_Rg.woff2') format('woff2'),
          url('fonts/WienerMelange_W_Rg.woff') format('woff');
     font-weight: 400;
-    font-style: normal;
   }
   @font-face {
     font-family: 'WienerMelange';
     src: url('fonts/WienerMelange_W_Bd.woff2') format('woff2'),
          url('fonts/WienerMelange_W_Bd.woff') format('woff');
     font-weight: 700;
-    font-style: normal;
   }
   @font-face {
     font-family: 'WienerMelange';
     src: url('fonts/WienerMelange_W_ExBd.woff2') format('woff2'),
          url('fonts/WienerMelange_W_ExBd.woff') format('woff');
     font-weight: 800;
-    font-style: normal;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: transparent; overflow: hidden; width: 1920px; height: 1080px; font-family: 'WienerMelange', sans-serif; }
+  body {
+    background: transparent;
+    overflow: hidden;
+    font-family: 'WienerMelange', sans-serif;
+  }
 
-  .bb-wrap { position: absolute; top: 0; left: 0; width: 1920px; height: 1080px; pointer-events: none; }
+  /* Canvas — always fills viewport, internal coords are 1080x1920 */
+  .canvas {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Transparency grid */
+  .trans-grid {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image:
+      linear-gradient(45deg, #e0e0e0 25%, transparent 25%),
+      linear-gradient(-45deg, #e0e0e0 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #e0e0e0 75%),
+      linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* Content layer — positioned in 9:16 space */
+  .content {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
 
   #bb-bar {
-    position: absolute;
-    left: 0; top: 350px;
-    height: 220px;
-    background: linear-gradient(90deg, #5b234d 0%, #9f3b5f 55%, #ff5865 100%);
-    opacity: 0;
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0 50px 0 45px;
+    background: linear-gradient(90deg, #5b234d 0%, #9f3b5f 55%, #ff5865 100%);
+    opacity: 0;
+    padding: 28px 50px 28px 45px;
+    margin-top: 42%;
     white-space: nowrap;
+    overflow: hidden;
   }
 
   #bb-name {
     color: #fff;
-    font-size: 80px;
+    font-size: clamp(28px, 4.5vw, 80px);
     font-weight: 800;
     letter-spacing: 0.5px;
-    line-height: 1.1;
+    line-height: 1.15;
   }
 
   #bb-role {
     color: #fff;
-    font-size: 80px;
+    font-size: clamp(28px, 4.5vw, 80px);
     font-weight: 400;
     letter-spacing: 0.3px;
-    line-height: 1.1;
-    margin-top: 0;
+    line-height: 1.15;
+    margin-top: 4px;
   }
 
+  /* Config panel */
   .bb-config {
-    position: absolute; top: 20px; right: 20px;
+    position: fixed; top: 20px; right: 20px;
     background: rgba(0,0,0,0.92); border: 1px solid #333;
     border-radius: 12px; padding: 24px;
     pointer-events: all; display: none;
     color: #fff; font-size: 14px;
     backdrop-filter: blur(12px); z-index: 100;
+    font-family: 'Inter', sans-serif;
   }
   .bb-config.show { display: block; }
   .bb-config h3 { margin-bottom: 16px; font-size: 16px; font-weight: 700; }
   .bb-config label { display: block; margin-bottom: 4px; color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
   .bb-config input {
     background: #1a1a1a; border: 1px solid #333; color: #fff;
-    padding: 8px 12px; border-radius: 6px; width: 300px; margin-bottom: 14px;
+    padding: 8px 12px; border-radius: 6px; width: 280px; margin-bottom: 14px;
     font-family: 'Inter', sans-serif; font-size: 14px;
   }
   .bb-config input:focus { outline: none; border-color: #9f3b5f; }
@@ -86,16 +118,31 @@
     border-radius: 6px; cursor: pointer; font-weight: 700; margin-right: 8px;
   }
   .bb-config button.secondary { background: #333; }
+
+  /* Loop indicator */
+  .loop-badge {
+    position: fixed; bottom: 16px; left: 16px;
+    background: rgba(0,0,0,0.7); color: #fff;
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; font-family: 'Inter', sans-serif;
+    pointer-events: none; z-index: 50;
+    font-weight: 600; letter-spacing: 0.5px;
+  }
 </style>
 </head>
 <body>
 
-<div class="bb-wrap">
-  <div id="bb-bar">
-    <div id="bb-name">Vorname Name</div>
-    <div id="bb-role">Position</div>
+<div class="canvas">
+  <div class="trans-grid"></div>
+  <div class="content">
+    <div id="bb-bar">
+      <div id="bb-name">Vorname Name</div>
+      <div id="bb-role">Position</div>
+    </div>
   </div>
 </div>
+
+<div class="loop-badge">↻ LOOP</div>
 
 <!-- Config — press 'E' -->
 <div class="bb-config" id="bb-config">
@@ -106,10 +153,6 @@
   <input id="cfg-role" value="Position" />
   <label>Farbe (CSS Gradient)</label>
   <input id="cfg-color" value="linear-gradient(90deg, #5b234d 0%, #9f3b5f 55%, #ff5865 100%)" />
-  <label>Name Größe (px)</label>
-  <input id="cfg-namesize" type="number" value="48" min="20" max="80" />
-  <label>Role Größe (px)</label>
-  <input id="cfg-rolesize" type="number" value="26" min="14" max="50" />
   <label>Dauer (Sekunden)</label>
   <input id="cfg-duration" type="number" value="5" min="2" max="20" />
   <button onclick="applyConfig()">Anwenden</button>
@@ -119,22 +162,17 @@
 <script>
 (function() {
   const params = new URLSearchParams(window.location.search);
-  const qName = params.get('name');
-  const qRole = params.get('role');
-  const qColor = params.get('color');
-  const qDuration = parseFloat(params.get('duration')) || 5;
+  if (params.get('name')) { document.getElementById('bb-name').textContent = params.get('name'); document.getElementById('cfg-name').value = params.get('name'); }
+  if (params.get('role')) { document.getElementById('bb-role').textContent = params.get('role'); document.getElementById('cfg-role').value = params.get('role'); }
+  if (params.get('color')) { document.getElementById('bb-bar').style.background = params.get('color'); document.getElementById('cfg-color').value = params.get('color'); }
 
-  if (qName) { document.getElementById('bb-name').textContent = qName; document.getElementById('cfg-name').value = qName; }
-  if (qRole) { document.getElementById('bb-role').textContent = qRole; document.getElementById('cfg-role').value = qRole; }
-  if (qColor) { document.getElementById('bb-bar').style.background = qColor; document.getElementById('cfg-color').value = qColor; }
-
+  let totalDuration = parseFloat(params.get('duration')) || 5;
   let tl;
-  let totalDuration = qDuration;
   const bar = document.getElementById('bb-bar');
 
   function measureBarWidth() {
     const orig = bar.style.cssText;
-    bar.style.cssText = 'position:absolute;left:0;top:350px;height:220px;display:inline-flex;flex-direction:column;justify-content:center;padding:0 50px 0 45px;opacity:1;white-space:nowrap;width:auto;background:' + (bar.style.background || 'inherit');
+    bar.style.cssText = 'display:inline-flex;flex-direction:column;justify-content:center;padding:28px 50px 28px 45px;opacity:1;white-space:nowrap;width:auto;position:static;background:' + (bar.style.background || 'inherit');
     const w = bar.scrollWidth;
     bar.style.cssText = orig;
     return w;
@@ -142,7 +180,7 @@
 
   function buildTimeline() {
     if (tl) { tl.kill(); }
-    tl = gsap.timeline({ paused: true });
+    tl = gsap.timeline({ paused: true, repeat: -1, repeatDelay: 1 });
 
     const targetWidth = measureBarWidth();
     const outStart = totalDuration - 0.8;
@@ -177,6 +215,7 @@
   buildTimeline();
   tl.play();
 
+  // Hyperframes seek
   window.addEventListener('hf-seek', function(e) {
     var t = (e && e.detail && e.detail.time != null) ? e.detail.time : 0;
     tl.time(t);
@@ -193,8 +232,6 @@
     document.getElementById('bb-name').textContent = document.getElementById('cfg-name').value;
     document.getElementById('bb-role').textContent = document.getElementById('cfg-role').value;
     bar.style.background = document.getElementById('cfg-color').value;
-    document.getElementById('bb-name').style.fontSize = document.getElementById('cfg-namesize').value + 'px';
-    document.getElementById('bb-role').style.fontSize = document.getElementById('cfg-rolesize').value + 'px';
     totalDuration = parseFloat(document.getElementById('cfg-duration').value) || 5;
 
     gsap.set(['#bb-bar','#bb-name','#bb-role'], { clearProps: 'all' });

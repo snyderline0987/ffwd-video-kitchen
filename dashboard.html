@@ -105,7 +105,8 @@
                             wrappers.forEach((wrapper, i) => {
                                 const iframe = iframes[i];
                                 if(wrapper && iframe) {
-                                    const scale = wrapper.clientWidth / 1920;
+                                    const iW = parseInt(iframe.style.width) || parseInt(iframe.getAttribute('width')) || (iframe.classList.contains('vertical') ? 1080 : 1920);
+                                    const scale = wrapper.clientWidth / iW;
                                     iframe.style.transform = `scale(${scale})`;
                                 }
                             });
@@ -125,21 +126,38 @@
                     </div>
                 </div>
 
-                <!-- Bauchbinde Card -->
                 <div class="card p-6 rounded-lg flex flex-col h-full bg-[#111] border-gray-800">
                     <div class="flex justify-between items-start mb-4">
-                        <h2 class="text-xl font-bold text-white">Bauchbinde</h2>
+                        <h2 class="text-xl font-bold text-white">Bauchbinde (9:16)</h2>
                         <span class="bg-red-900 text-red-300 px-2 py-1 rounded text-xs uppercase font-bold">Motion</span>
                     </div>
                     <p class="text-gray-400 mb-4 text-sm">ESC-style name insert. Crop reveal from left. Wiener Melange font. Configurable via URL params or press E.</p>
                     
-                    <div class="w-full bg-[#fff] border border-gray-700 rounded overflow-hidden relative mb-4 iframe-wrapper" style="aspect-ratio: 16/9;">
-                        <iframe src="composition-bauchbinde.html" class="absolute top-0 left-0 w-[1920px] h-[1080px] pointer-events-none origin-top-left scaled-iframe"></iframe>
+                    <div class="w-full mx-auto bg-[#fff] border border-gray-700 rounded overflow-hidden relative mb-4 iframe-wrapper" style="aspect-ratio: 9/16; max-width: 200px;">
+                        <iframe src="composition-bauchbinde.html" class="absolute top-0 left-0 w-[1080px] h-[1920px] pointer-events-none origin-top-left scaled-iframe"></iframe>
                     </div>
                     
                     <div class="mt-auto flex gap-2">
                         <a href="composition-bauchbinde.html" target="_blank" class="w-1/2 text-center py-2 bg-red-700 hover:bg-red-600 text-white font-semibold rounded transition text-xs block">▶ Preview</a>
                         <button onclick="navigator.clipboard.writeText('composition-bauchbinde.html?name=Vorname+Name&role=Position')" class="w-1/2 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-xs">Copy Tag</button>
+                    </div>
+                </div>
+
+                <!-- Rapid Insert Card -->
+                <div class="card p-6 rounded-lg flex flex-col h-full bg-[#111] border-gray-800">
+                    <div class="flex justify-between items-start mb-4">
+                        <h2 class="text-xl font-bold text-white">Rapid Insert</h2>
+                        <span class="bg-green-900 text-green-300 px-2 py-1 rounded text-xs uppercase font-bold">Motion</span>
+                    </div>
+                    <p class="text-gray-400 mb-4 text-sm">FCPX-style name insert with original fill video. Green bar with Wiener Melange text overlay. 16:9.</p>
+                    
+                    <div class="w-full bg-[#000] border border-gray-700 rounded overflow-hidden relative mb-4 iframe-wrapper" style="aspect-ratio: 16/9;">
+                        <iframe src="composition-rapid-insert.html" class="absolute top-0 left-0 w-[1920px] h-[1080px] pointer-events-none origin-top-left scaled-iframe"></iframe>
+                    </div>
+                    
+                    <div class="mt-auto flex gap-2">
+                        <a href="composition-rapid-insert.html" target="_blank" class="w-1/2 text-center py-2 bg-green-700 hover:bg-green-600 text-white font-semibold rounded transition text-xs block">▶ Preview</a>
+                        <button onclick="navigator.clipboard.writeText('composition-rapid-insert.html?name=Vorname+Name&role=Position')" class="w-1/2 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-xs">Copy Tag</button>
                     </div>
                 </div>
             </div>

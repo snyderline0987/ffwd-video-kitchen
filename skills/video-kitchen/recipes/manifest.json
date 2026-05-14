@@ -100,6 +100,13 @@
       "file": "public/composition-opener.html",
       "has_preview": true,
       "has_raw": true
+    },
+    {
+      "id": "rapid-insert",
+      "name": "Rapid Insert",
+      "file": "public/composition-rapid-insert.html",
+      "has_preview": false,
+      "has_raw": false
     }
   ]
 }
