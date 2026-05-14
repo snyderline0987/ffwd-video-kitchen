@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>On Air Promo Longform — FFWD Video Kitchen</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; overflow: hidden; width: 1920px; height: 1080px; font-family: 'Inter', sans-serif; }
+  .scene { position: absolute; top: 0; left: 0; width: 1920px; height: 1080px; opacity: 0; display: flex; align-items: center; justify-content: center; }
+  .vignette { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%); pointer-events: none; }
+  .letterbox-top { position: absolute; top: 0; left: 0; width: 100%; height: 80px; background: #000; }
+  .letterbox-bottom { position: absolute; bottom: 0; left: 0; width: 100%; height: 80px; background: #000; }
+</style>
+</head>
+<body>
+
+<!-- Scene 1: Dramatic Opener (0-6s) -->
+<div class="scene" id="scene-opener">
+  <div class="letterbox-top"></div>
+  <div class="letterbox-bottom"></div>
+  <div style="text-align:center; position:relative;">
+    <div id="opener-line" style="width:0; height:2px; background:#e50914; margin:0 auto 30px;"></div>
+    <div id="opener-text" class="text-8xl font-black text-white tracking-tight" style="opacity:0; clip-path: inset(0 100% 0 0);">
+      NEXT WEEK
+    </div>
+    <div id="opener-sub" class="text-3xl font-light text-gray-400 mt-6" style="opacity:0;">
+      on FFWD
+    </div>
+  </div>
+  <div class="vignette"></div>
+</div>
+
+<!-- Scene 2: Highlight 1 — Action Scene (6-14s) -->
+<div class="scene" id="scene-hl1">
+  <div class="letterbox-top"></div>
+  <div class="letterbox-bottom"></div>
+  <div style="position:relative; text-align:center;">
+    <div id="hl1-bg" style="position:absolute; width:1920px; height:1080px; background: linear-gradient(180deg, #1a0a0a 0%, #2a1515 50%, #0a0a0a 100%); top:0; left:50%; transform:translateX(-50%);"></div>
+    <div style="position:relative; z-index:1;">
+      <div id="hl1-tag" style="display:inline-block; background:#e50914; color:#fff; padding:8px 24px; font-size:14px; font-weight:700; letter-spacing:3px; opacity:0;">HIGHLIGHT</div>
+      <h2 id="hl1-title" class="text-6xl font-black text-white mt-8" style="opacity:0;">
+        The Impossible Shot
+      </h2>
+      <p id="hl1-desc" class="text-xl text-gray-300 mt-4 max-w-2xl mx-auto" style="opacity:0;">
+        Behind the scenes of the most dangerous stunt ever attempted on camera
+      </p>
+    </div>
+  </div>
+  <div class="vignette"></div>
+</div>
+
+<!-- Scene 3: Highlight 2 — Emotional Moment (14-22s) -->
+<div class="scene" id="scene-hl2">
+  <div class="letterbox-top"></div>
+  <div class="letterbox-bottom"></div>
+  <div style="text-align:center; position:relative;">
+    <div id="hl2-quote" style="max-width:1100px; opacity:0;">
+      <div style="font-size:120px; color:rgba(229,9,20,0.2); line-height:0.5; font-weight:900;">"</div>
+      <p class="text-5xl font-light text-white italic leading-relaxed" style="margin-top:-40px;">
+        I never thought we'd make it. But here we are.
+      </p>
+    </div>
+    <div id="hl2-attrib" class="text-lg text-gray-500 mt-8" style="opacity:0;">
+      — Episode 12 · The Reckoning
+    </div>
+  </div>
+  <div class="vignette"></div>
+</div>
+
+<!-- Scene 4: Highlight 3 — Big Reveal (22-32s) -->
+<div class="scene" id="scene-hl3">
+  <div class="letterbox-top"></div>
+  <div class="letterbox-bottom"></div>
+  <div style="text-align:center; position:relative;">
+    <div id="hl3-number" class="font-black" style="font-size:200px; color:rgba(229,9,20,0.15); line-height:1; opacity:0;">S2</div>
+    <h2 id="hl3-title" class="text-7xl font-black text-white" style="margin-top:-60px; opacity:0;">
+      Season Finale
+    </h2>
+    <div id="hl3-line" style="width:0; height:3px; background:#e50914; margin:30px auto 0;"></div>
+    <p id="hl3-date" class="text-2xl text-gray-400 mt-6" style="opacity:0;">
+      Friday · 8PM · Only on FFWD
+    </p>
+  </div>
+  <div class="vignette"></div>
+</div>
+
+<!-- Scene 5: CTA Closing (32-40s) -->
+<div class="scene" id="scene-cta">
+  <div class="letterbox-top"></div>
+  <div class="letterbox-bottom"></div>
+  <div style="text-align:center; position:relative;">
+    <div id="cta-logo" style="opacity:0;">
+      <span class="text-6xl font-black tracking-tighter" style="color:#e50914;">FFWD</span>
+    </div>
+    <h2 id="cta-text" class="text-5xl font-black text-white mt-6" style="opacity:0;">
+      Don't Miss It.
+    </h2>
+    <div id="cta-line" style="width:0; height:2px; background:#e50914; margin:24px auto 0;"></div>
+    <div id="cta-sub" class="text-lg text-gray-500 mt-6" style="opacity:0;">
+      Set your reminder now
+    </div>
+  </div>
+  <div class="vignette"></div>
+</div>
+
+<script>
+(function() {
+  const tl = gsap.timeline({ paused: true });
+
+  // Scene 1: Opener (0-6s)
+  tl.fromTo('#scene-opener', { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0)
+    .to('#opener-line', { width: 200, duration: 0.8, ease: 'power2.out' }, 0.5)
+    .fromTo('#opener-text', { opacity: 0, clipPath: 'inset(0 100% 0 0)' }, { opacity: 1, clipPath: 'inset(0 0% 0 0)', duration: 1.0, ease: 'power4.out' }, 0.8)
+    .fromTo('#opener-sub', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }, 1.8)
+    .to('#scene-opener', { opacity: 0, duration: 0.8, ease: 'power2.inOut' }, 5.2);
+
+  // Scene 2: Highlight 1 (6-14s)
+  tl.fromTo('#scene-hl1', { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 1.0, ease: 'power2.out' }, 6.0)
+    .fromTo('#hl1-tag', { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'back.out(2)' }, 7.0)
+    .fromTo('#hl1-title', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 7.5)
+    .fromTo('#hl1-desc', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }, 8.3)
+    .to('#scene-hl1', { opacity: 0, scale: 0.95, duration: 0.8, ease: 'power2.inOut' }, 13.2);
+
+  // Scene 3: Highlight 2 (14-22s)
+  tl.fromTo('#scene-hl2', { opacity: 0 }, { opacity: 1, duration: 0.8 }, 14.0)
+    .fromTo('#hl2-quote', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1.0, ease: 'power3.out' }, 14.8)
+    .fromTo('#hl2-attrib', { opacity: 0 }, { opacity: 1, duration: 0.6 }, 16.0)
+    .to('#scene-hl2', { opacity: 0, duration: 0.8, ease: 'power2.inOut' }, 21.2);
+
+  // Scene 4: Highlight 3 (22-32s)
+  tl.fromTo('#scene-hl3', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 1.0, ease: 'power2.out' }, 22.0)
+    .fromTo('#hl3-number', { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.2, ease: 'power4.out' }, 22.5)
+    .fromTo('#hl3-title', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 23.5)
+    .to('#hl3-line', { width: 250, duration: 0.6, ease: 'power2.out' }, 24.5)
+    .fromTo('#hl3-date', { opacity: 0 }, { opacity: 1, duration: 0.5 }, 25.2)
+    .to('#scene-hl3', { opacity: 0, duration: 0.8, ease: 'power2.inOut' }, 31.2);
+
+  // Scene 5: CTA (32-40s)
+  tl.fromTo('#scene-cta', { opacity: 0 }, { opacity: 1, duration: 0.8 }, 32.0)
+    .fromTo('#cta-logo', { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: 'back.out(1.5)' }, 32.5)
+    .fromTo('#cta-text', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, 33.5)
+    .to('#cta-line', { width: 180, duration: 0.5, ease: 'power2.out' }, 34.3)
+    .fromTo('#cta-sub', { opacity: 0 }, { opacity: 1, duration: 0.5 }, 34.8);
+
+  window.__timelines = [tl];
+  window.__duration = 40;
+
+  window.addEventListener('hf-seek', function(e) {
+    var t = (e && e.detail && e.detail.time != null) ? e.detail.time : 0;
+    tl.time(t);
+    tl.pause();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "id": "gen_ai_remake",
+  "title": "Gen AI Remake",
+  "aspect_ratio": "16:9",
+  "duration": "30s",
+  "description": "AI-generated remake of a classic scene or concept. Before/after transformation style with glitch and AI visual effects.",
+  "theory": "Eisenstein (Overtonal Montage)",
+  "prompt": "Create a before/after transformation. Start with original style, transition through AI processing effects (glitch, pixel sort, neural style), reveal the AI remake. Show the transformation as a journey.",
+  "vo_pref": "Nova (cool, analytical)",
+  "music_pref": "Synthetic / Ambient (15% Vol)",
+  "cut_style": "Eisenstein overtonal. Conflict between old/new, analog/digital. Glitch transitions, datamosh effects, hard juxtapositions."
+}

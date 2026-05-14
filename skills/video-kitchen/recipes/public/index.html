@@ -219,10 +219,12 @@
 
         // Projects Logic
         async function loadProjects() {
+            let projects = [];
             try {
                 const res = await fetch('/api/projects');
-                const projects = await res.json();
-                const container = document.getElementById('projects-container');
+                if (res.ok) projects = await res.json();
+            } catch (e) { /* server not running */ }
+            const container = document.getElementById('projects-container');
                 container.innerHTML = '';
                 
                 projects.forEach(p => {
@@ -249,43 +251,59 @@
         // Recipes Logic
         let currentRecipeId = null;
 
-        async function loadRecipes() {
+        async function fetchRecipes() {
+            // Try server API first, fall back to manifest.json
             try {
                 const res = await fetch('/api/recipes');
-                const recipes = await res.json();
-                const grid = document.getElementById('recipe-grid');
-                grid.innerHTML = '';
-                recipes.forEach((r) => {
-                    grid.innerHTML += `
-                        <div class="card p-6 rounded-lg flex flex-col h-full">
-                            <div class="flex justify-between items-start mb-4">
-                                <h2 class="text-xl font-bold">${r.title}</h2>
-                                <div class="flex gap-2">
-                                    <span class="badge">${r.aspect_ratio}</span>
-                                    <span class="badge">${r.duration}</span>
-                                </div>
-                            </div>
-                            <p class="text-gray-400 mb-4 text-sm flex-1">${r.description}</p>
-                            
-                            <div class="mb-4 bg-[#111] p-3 rounded text-xs border border-gray-800">
-                                <div class="text-gray-500 mb-1"><span class="font-bold text-gray-300">Prompt:</span> ${r.prompt || ''}</div>
-                                <div class="text-gray-500 mb-1"><span class="font-bold text-gray-300">Music:</span> ${r.music_pref || ''}</div>
-                                <div class="text-gray-500"><span class="font-bold text-gray-300">Cut:</span> ${r.cut_style || ''}</div>
-                            </div>
+                if (res.ok) return await res.json();
+            } catch (e) { /* server not running */ }
+            try {
+                const res = await fetch('manifest.json');
+                if (res.ok) { const m = await res.json(); return m.recipes; }
+            } catch (e) { /* no manifest */ }
+            return [];
+        }
 
-                            <div class="mb-5">
-                                <span class="badge theory-badge">${r.theory || ''}</span>
+        async function loadRecipes() {
+            const recipes = await fetchRecipes();
+            const grid = document.getElementById('recipe-grid');
+            grid.innerHTML = '';
+            recipes.forEach((r) => {
+                const compSrc = r.id + '/composition.html';
+                const compFrame = r.has_composition ? `
+                    <div class="w-full bg-[#000] border border-gray-700 rounded overflow-hidden relative mb-4" style="aspect-ratio: ${r.aspect_ratio === '9:16' ? '9/16' : '16/9'}; max-height: 200px;">
+                        <iframe src="${compSrc}" class="absolute top-0 left-0 w-full h-full pointer-events-none"></iframe>
+                    </div>` : '';
+                grid.innerHTML += `
+                    <div class="card p-6 rounded-lg flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-4">
+                            <h2 class="text-xl font-bold">${r.title}</h2>
+                            <div class="flex gap-2">
+                                <span class="badge">${r.aspect_ratio}</span>
+                                <span class="badge">${r.duration}</span>
                             </div>
-                            
-                            <button onclick='openModal(${JSON.stringify(r).replace(/'/g, "&#39;")})' class="w-full text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-sm">
-                                ⚙️ Edit Config
+                        </div>
+                        <p class="text-gray-400 mb-4 text-sm flex-1">${r.description}</p>
+                        ${compFrame}
+                        <div class="mb-4 bg-[#111] p-3 rounded text-xs border border-gray-800">
+                            <div class="text-gray-500 mb-1"><span class="font-bold text-gray-300">Prompt:</span> ${r.prompt || ''}</div>
+                            <div class="text-gray-500 mb-1"><span class="font-bold text-gray-300">Music:</span> ${r.music_pref || ''}</div>
+                            <div class="text-gray-500"><span class="font-bold text-gray-300">Cut:</span> ${r.cut_style || ''}</div>
+                        </div>
+
+                        <div class="mb-5">
+                            <span class="badge theory-badge">${r.theory || ''}</span>
+                        </div>
+                        
+                        <div class="flex gap-2 mt-auto">
+                            ${r.has_composition ? `<a href="${compSrc}" target="_blank" class="flex-1 text-center py-2 bg-red-700 hover:bg-red-600 text-white font-semibold rounded transition text-sm">▶ Preview</a>` : ''}
+                            <button onclick='openModal(${JSON.stringify(r).replace(/'/g, "&#39;")})' class="flex-1 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-sm">
+                                ⚙️ Edit
                             </button>
                         </div>
-                    `;
-                });
-            } catch (e) {
-                console.error("Failed to load recipes", e);
-            }
+                    </div>
+                `;
+            });
         }
 
         function openCreateModal() {
@@ -366,6 +384,17 @@
         // Init
         loadProjects();
         loadRecipes();
+        // Also load templates into Motion Templates tab
+        loadTemplates();
+
+        async function loadTemplates() {
+            let templates = [];
+            try {
+                const res = await fetch('manifest.json');
+                if (res.ok) { const m = await res.json(); templates = m.templates; }
+            } catch (e) {}
+            // Existing template cards are static in HTML, this just adds dynamic ones later
+        }
     </script>
 </body>
 </html>

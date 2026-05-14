@@ -1,0 +1,98 @@
+{
+  "recipes": [
+    {
+      "id": "gen_ai_remake",
+      "title": "Gen AI Remake",
+      "aspect_ratio": "16:9",
+      "duration": "30s",
+      "description": "AI-generated remake of a classic scene or concept. Before/after transformation style with glitch and AI visual effects.",
+      "theory": "Eisenstein (Overtonal Montage)",
+      "prompt": "Create a before/after transformation. Start with original style, transition through AI processing effects (glitch, pixel sort, neural style), reveal the AI remake. Show the transformation as a journey.",
+      "vo_pref": "Nova (cool, analytical)",
+      "music_pref": "Synthetic / Ambient (15% Vol)",
+      "cut_style": "Eisenstein overtonal. Conflict between old/new, analog/digital. Glitch transitions, datamosh effects, hard juxtapositions.",
+      "has_composition": true
+    },
+    {
+      "id": "meme_culture_react",
+      "title": "Meme Culture React",
+      "aspect_ratio": "9:16",
+      "duration": "15s",
+      "description": "Meme reaction format for social media. Zoom effects, bold text, irreverent tone. Quick punchy cuts with text overlays.",
+      "theory": "Eisenstein (Tonal Montage)",
+      "prompt": "Start with a reaction trigger. Build with zoom-ins and bold text overlays. Hit the punchline hard. Use meme formatting — Impact font, white outlines, dramatic zooms.",
+      "vo_pref": "Alloy (chaotic, fun)",
+      "music_pref": "Meme / Trending Audio (ducked)",
+      "cut_style": "Tonal montage. Emotional contrast between scenes. Zoom cuts for emphasis. Text should feel like meme captions.",
+      "has_composition": true
+    },
+    {
+      "id": "news_overview_30s",
+      "title": "News Overview 30s",
+      "aspect_ratio": "16:9",
+      "duration": "30s",
+      "description": "Knackige Zusammenfassung eines News-Beitrags. Hook -> Context -> Key Fact -> Wrap.",
+      "theory": "Dmytryk (Substance First)",
+      "prompt": "Fasse die Kernfakten des Artikels zusammen. Wähle 4-6 klare B-Roll Szenen. Fokus auf Information.",
+      "vo_pref": "Nova (sachlich, nachrichtlich)",
+      "music_pref": "shelter_to_the_valley.mp3 (15% Vol)",
+      "cut_style": "Klare harte Schnitte (Dmytryk). Bild steht so lange, bis die Info vermittelt ist.",
+      "has_composition": true
+    },
+    {
+      "id": "on_air_promo_longform",
+      "title": "On Air Promo (Longform)",
+      "aspect_ratio": "16:9",
+      "duration": "40s",
+      "description": "'Nächste Woche bei...' Teaser aus einer langen Sendung. Inklusive Liquid-Text Motion Graphics.",
+      "theory": "Menke (Scene as Mini-Film)",
+      "prompt": "Finde die spannendsten und visuell stärksten Momente. Ignoriere sprechende Köpfe. Baue einen Spannungsbogen.",
+      "vo_pref": "Onyx (tief, spannend, episch)",
+      "music_pref": "shelter_to_the_valley.mp3 (20% Vol)",
+      "cut_style": "Rhythmisch, passend zum Musik-Beat. Schnelle Schnitte am Anfang, lange Holds bei Key-Visuals.",
+      "has_composition": true
+    },
+    {
+      "id": "product_landing_page",
+      "title": "Product Landing Page",
+      "aspect_ratio": "16:9",
+      "duration": "20s",
+      "description": "Clean product showcase video. Hero shot, feature highlights, pricing CTA. Modern, minimal, sales-driven.",
+      "theory": "Dmytryk (Substance First)",
+      "prompt": "Open with a hero product shot. Reveal 3 key features with clean animations. Close with pricing and CTA. Every frame should sell. No filler.",
+      "vo_pref": "Nova (confident, clear)",
+      "music_pref": "Upbeat Corporate / Minimal (10% Vol)",
+      "cut_style": "Dmytryk clean cuts. Each shot stays as long as it takes to communicate the feature. No wasted frames. Substance over style.",
+      "has_composition": true
+    },
+    {
+      "id": "social_clip_9x16",
+      "title": "Social Clip 9:16",
+      "aspect_ratio": "9:16",
+      "duration": "15-25s",
+      "description": "Vertikaler Clip für Instagram/TikTok. Fokus auf Hook, Punchline und schnelle Action.",
+      "theory": "Eisenstein (Metric Montage)",
+      "prompt": "Hook in den ersten 1.5s! Wähle Szenen mit viel Bewegung. Center-Crop-safe (wichtig für 9:16).",
+      "vo_pref": "Alloy (schnell, enthusiastisch)",
+      "music_pref": "Upbeat / Trendy (ducked unter Sprache)",
+      "cut_style": "Metric Montage. Sehr schnelle Schnitte, maximal 2-3s pro Clip.",
+      "has_composition": true
+    }
+  ],
+  "templates": [
+    {
+      "id": "lower-third",
+      "name": "Lower Third",
+      "file": "public/composition-lower-third.html",
+      "has_preview": false,
+      "has_raw": true
+    },
+    {
+      "id": "opener",
+      "name": "Opener",
+      "file": "public/composition-opener.html",
+      "has_preview": true,
+      "has_raw": true
+    }
+  ]
+}

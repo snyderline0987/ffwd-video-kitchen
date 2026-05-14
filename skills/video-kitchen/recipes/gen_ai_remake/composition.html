@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>Gen AI Remake — FFWD Video Kitchen</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; overflow: hidden; width: 1920px; height: 1080px; font-family: 'Inter', sans-serif; }
+  .scene { position: absolute; top: 0; left: 0; width: 1920px; height: 1080px; opacity: 0; display: flex; align-items: center; justify-content: center; }
+  .scanline { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: rgba(229,9,20,0.6); z-index: 10; pointer-events: none; }
+  .glitch-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px); pointer-events: none; z-index: 5; }
+  .split-line { position: absolute; top: 0; width: 3px; height: 100%; background: #e50914; z-index: 10; }
+  .before-label, .after-label { position: absolute; top: 40px; font-size: 14px; font-weight: 700; letter-spacing: 3px; padding: 6px 16px; z-index: 11; }
+  .before-label { left: 40px; color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.2); }
+  .after-label { right: 40px; color: #e50914; border: 1px solid rgba(229,9,20,0.4); }
+</style>
+</head>
+<body>
+
+<!-- Scene 1: Original — "Before" (0-5s) -->
+<div class="scene" id="scene-before">
+  <div style="text-align:center; position:relative;">
+    <div style="font-size:14px; color:rgba(255,255,255,0.3); letter-spacing:4px; font-weight:600;">ORIGINAL</div>
+    <h1 id="before-title" class="text-7xl font-black text-white mt-4" style="opacity:0;">
+      The Classic
+    </h1>
+    <p id="before-desc" class="text-xl text-gray-500 mt-4" style="opacity:0;">
+      A timeless scene, waiting to be reimagined
+    </p>
+    <div id="before-frame" style="width:800px; height:450px; margin:40px auto 0; background: linear-gradient(135deg, #2a2a2a, #1a1a1a); border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; opacity:0;">
+      <span style="color:rgba(255,255,255,0.2); font-size:120px;">🎬</span>
+    </div>
+  </div>
+</div>
+
+<!-- Scene 2: AI Processing — Glitch/Transition (5-12s) -->
+<div class="scene" id="scene-process">
+  <div class="glitch-overlay"></div>
+  <div id="scanline" class="scanline" style="top:-4px;"></div>
+  <div style="text-align:center; position:relative; z-index:2;">
+    <div id="process-label" style="font-family:'JetBrains Mono',monospace; color:#e50914; font-size:16px; letter-spacing:2px; opacity:0;">PROCESSING</div>
+    <div id="process-text" class="text-8xl font-black text-white mt-6" style="opacity:0;">
+      AI REMAKE
+    </div>
+    <div id="process-bar-track" style="width:600px; height:6px; background:rgba(255,255,255,0.1); margin:40px auto 0; border-radius:3px; overflow:hidden;">
+      <div id="process-bar" style="width:0; height:100%; background:#e50914; border-radius:3px;"></div>
+    </div>
+    <div id="process-pct" style="font-family:'JetBrains Mono',monospace; color:rgba(255,255,255,0.4); font-size:48px; margin-top:20px; opacity:0;">0%</div>
+    <div id="process-steps" style="font-family:'JetBrains Mono',monospace; color:rgba(255,255,255,0.2); font-size:14px; margin-top:30px; opacity:0;">
+      <div>Analyzing composition...</div>
+      <div>Extracting style vectors...</div>
+      <div>Generating neural output...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Scene 3: Split — Before/After (12-20s) -->
+<div class="scene" id="scene-split">
+  <div style="position:absolute; top:0; left:0; width:50%; height:100%; background:linear-gradient(135deg, #1a1a1a, #2a2a2a); display:flex; align-items:center; justify-content:center;">
+    <div style="text-align:center; opacity:0.5;">
+      <span style="font-size:80px;">🎬</span>
+      <div class="text-lg text-gray-500 mt-4">Original</div>
+    </div>
+  </div>
+  <div style="position:absolute; top:0; right:0; width:50%; height:100%; background:linear-gradient(135deg, #1a0a2e, #0a1a2e); display:flex; align-items:center; justify-content:center;">
+    <div id="after-side" style="text-align:center; opacity:0;">
+      <span style="font-size:80px;">✨</span>
+      <div class="text-lg font-bold mt-4" style="color:#e50914;">AI Remake</div>
+    </div>
+  </div>
+  <div id="split-divider" class="split-line" style="left:960px;"></div>
+  <div class="before-label">BEFORE</div>
+  <div class="after-label">AFTER</div>
+</div>
+
+<!-- Scene 4: Final Reveal (20-26s) -->
+<div class="scene" id="scene-reveal">
+  <div style="text-align:center; position:relative;">
+    <div id="reveal-badge" style="display:inline-block; background:#e50914; color:#fff; padding:8px 24px; font-size:14px; font-weight:700; letter-spacing:3px; opacity:0;">AI GENERATED</div>
+    <h2 id="reveal-title" class="text-7xl font-black text-white mt-8" style="opacity:0;">
+      The Reimagining
+    </h2>
+    <p id="reveal-sub" class="text-2xl text-gray-400 mt-4" style="opacity:0;">
+      Same essence. New dimension.
+    </p>
+  </div>
+</div>
+
+<!-- Scene 5: Closing (26-30s) -->
+<div class="scene" id="scene-close">
+  <div style="text-align:center;">
+    <div id="close-logo" style="opacity:0;">
+      <span class="text-5xl font-black" style="color:#e50914;">FFWD</span>
+      <span class="text-xl text-gray-500 ml-3 font-light">AI STUDIO</span>
+    </div>
+    <div id="close-tagline" class="text-3xl text-gray-400 mt-6 font-light" style="opacity:0;">
+      Remake anything.
+    </div>
+    <div id="close-line" style="width:0; height:2px; background:#e50914; margin:24px auto 0;"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const tl = gsap.timeline({ paused: true });
+
+  // Scene 1: Before (0-5s)
+  tl.fromTo('#scene-before', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0)
+    .fromTo('#before-title', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, 0.3)
+    .fromTo('#before-desc', { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.8)
+    .fromTo('#before-frame', { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: 'power2.out' }, 1.2)
+    .to('#scene-before', { opacity: 0, duration: 0.3 }, 4.7);
+
+  // Scene 2: Processing (5-12s)
+  tl.fromTo('#scene-process', { opacity: 0 }, { opacity: 1, duration: 0.2 }, 5.0)
+    .fromTo('#process-label', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 5.2)
+    .fromTo('#process-text', { opacity: 0 }, { opacity: 1, duration: 0.5 }, 5.5)
+    .fromTo('#process-pct', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 5.8)
+    .fromTo('#process-steps', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 6.0)
+    .to('#process-bar', { width: '100%', duration: 5.0, ease: 'power1.inOut' }, 5.5)
+    .to('#process-pct', { innerText: 100, duration: 5.0, snap: { innerText: 1 }, ease: 'power1.inOut',
+      onUpdate: function() {
+        document.getElementById('process-pct').textContent = Math.round(gsap.getProperty('#process-pct', 'innerText')) + '%';
+      }
+    }, 5.5)
+    .to('#scanline', { top: 1080, duration: 3.0, ease: 'none', repeat: 1 }, 5.0)
+    .to('#scene-process', { opacity: 0, duration: 0.3 }, 11.7);
+
+  // Scene 3: Split (12-20s)
+  tl.fromTo('#scene-split', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 12.0)
+    .fromTo('#after-side', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out' }, 13.0)
+    .to('#split-divider', { left: 480, duration: 3.0, ease: 'power2.inOut' }, 15.0)
+    .to('#scene-split', { opacity: 0, duration: 0.4 }, 19.6);
+
+  // Scene 4: Reveal (20-26s)
+  tl.fromTo('#scene-reveal', { opacity: 0, scale: 1.05 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' }, 20.0)
+    .fromTo('#reveal-badge', { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'back.out(2)' }, 20.3)
+    .fromTo('#reveal-title', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, 20.7)
+    .fromTo('#reveal-sub', { opacity: 0 }, { opacity: 1, duration: 0.5 }, 21.5)
+    .to('#scene-reveal', { opacity: 0, duration: 0.4 }, 25.6);
+
+  // Scene 5: Close (26-30s)
+  tl.fromTo('#scene-close', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 26.0)
+    .fromTo('#close-logo', { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.5)' }, 26.3)
+    .fromTo('#close-tagline', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, 27.0)
+    .to('#close-line', { width: 200, duration: 0.5, ease: 'power2.out' }, 27.6);
+
+  window.__timelines = [tl];
+  window.__duration = 30;
+
+  window.addEventListener('hf-seek', function(e) {
+    var t = (e && e.detail && e.detail.time != null) ? e.detail.time : 0;
+    tl.time(t);
+    tl.pause();
+  });
+})();
+</script>
+</body>
+</html>

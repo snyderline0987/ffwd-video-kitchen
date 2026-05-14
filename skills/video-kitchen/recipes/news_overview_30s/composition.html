@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>News Overview 30s — FFWD Video Kitchen</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; overflow: hidden; width: 1920px; height: 1080px; font-family: 'Inter', sans-serif; }
+  .scene { position: absolute; top: 0; left: 0; width: 1920px; height: 1080px; opacity: 0; }
+  .broll { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .headline-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 160px; background: linear-gradient(transparent, rgba(0,0,0,0.85)); display: flex; align-items: flex-end; padding: 0 80px 40px; }
+  .ticker { position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: #e50914; }
+  .lower-stripe { position: absolute; bottom: 6px; left: 0; width: 100%; height: 50px; background: rgba(229,9,20,0.9); display: flex; align-items: center; padding: 0 80px; }
+  .timecode { position: absolute; top: 40px; right: 60px; font-size: 18px; color: rgba(255,255,255,0.4); font-variant-numeric: tabular-nums; }
+  .ffwd-logo { position: absolute; top: 30px; left: 60px; font-weight: 900; font-size: 24px; color: #e50914; letter-spacing: 4px; }
+</style>
+</head>
+<body>
+
+<!-- Scene 1: Opening Headline (0-4s) -->
+<div class="scene" id="scene-headline">
+  <div class="broll" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+    <div class="text-center">
+      <div class="ffwd-logo" style="position:static; margin-bottom: 20px;">FFWD NEWS</div>
+      <h1 id="headline-text" class="text-7xl font-black text-white leading-tight" style="max-width:1400px;">
+        Breaking: New Study Reveals<br>Climate Impact on Global Markets
+      </h1>
+      <div id="headline-underline" style="width:0; height:4px; background:#e50914; margin:30px auto 0;"></div>
+    </div>
+  </div>
+  <div class="ticker"></div>
+  <div class="timecode">00:00</div>
+</div>
+
+<!-- Scene 2: B-Roll 1 — Data Context (4-10s) -->
+<div class="scene" id="scene-broll1">
+  <div class="broll" style="background: linear-gradient(180deg, #1a1a1a 0%, #2d1f1f 100%);">
+    <div style="text-align:center;">
+      <div id="stat-number" class="text-9xl font-black text-white" style="opacity:0;">47%</div>
+      <p id="stat-label" class="text-3xl text-gray-300 mt-4" style="opacity:0;">Increase in renewable energy investments since 2023</p>
+    </div>
+  </div>
+  <div class="headline-bar">
+    <p class="text-xl text-white font-semibold">Economic analysts point to shifting global energy policies</p>
+  </div>
+  <div class="ticker"></div>
+  <div class="timecode">00:04</div>
+</div>
+
+<!-- Scene 3: B-Roll 2 — Expert/Context (10-17s) -->
+<div class="scene" id="scene-broll2">
+  <div class="broll" style="background: linear-gradient(135deg, #0a0a0a 0%, #1a2332 100%);">
+    <div id="quote-block" style="max-width:1200px; border-left: 6px solid #e50914; padding-left: 40px; opacity:0;">
+      <p class="text-4xl text-white font-light italic leading-relaxed">
+        "The data is clear. We're seeing a fundamental shift in how markets value sustainability."
+      </p>
+      <p class="text-xl text-gray-400 mt-6 font-semibold">— Dr. Elena Vasquez, Climate Economics Institute</p>
+    </div>
+  </div>
+  <div class="headline-bar">
+    <p class="text-xl text-white font-semibold">Leading researchers confirm accelerating trend across sectors</p>
+  </div>
+  <div class="lower-stripe">
+    <span class="text-white text-sm font-bold tracking-wider">LIVE UPDATE — GLOBAL MARKETS</span>
+  </div>
+</div>
+
+<!-- Scene 4: B-Roll 3 — Key Fact (17-24s) -->
+<div class="scene" id="scene-broll3">
+  <div class="broll" style="background: linear-gradient(180deg, #0a0a0a 0%, #1f1a2d 100%);">
+    <div style="display:flex; gap:60px; justify-content:center; align-items:flex-start;">
+      <div id="fact-card-1" class="text-center" style="background:rgba(229,9,20,0.1); border:1px solid rgba(229,9,20,0.3); padding:40px 50px; border-radius:12px; opacity:0;">
+        <div class="text-6xl font-black text-white">3.2T</div>
+        <div class="text-lg text-gray-400 mt-2">Dollars invested</div>
+      </div>
+      <div id="fact-card-2" class="text-center" style="background:rgba(229,9,20,0.1); border:1px solid rgba(229,9,20,0.3); padding:40px 50px; border-radius:12px; opacity:0;">
+        <div class="text-6xl font-black text-white">142</div>
+        <div class="text-lg text-gray-400 mt-2">Countries involved</div>
+      </div>
+      <div id="fact-card-3" class="text-center" style="background:rgba(229,9,20,0.1); border:1px solid rgba(229,9,20,0.3); padding:40px 50px; border-radius:12px; opacity:0;">
+        <div class="text-6xl font-black text-white">2028</div>
+        <div class="text-lg text-gray-400 mt-2">Projected target year</div>
+      </div>
+    </div>
+  </div>
+  <div class="headline-bar">
+    <p class="text-xl text-white font-semibold">Key figures from the 2026 Global Sustainability Report</p>
+  </div>
+  <div class="ticker"></div>
+</div>
+
+<!-- Scene 5: Closing (24-30s) -->
+<div class="scene" id="scene-closing">
+  <div class="broll" style="background: #0a0a0a;">
+    <div class="text-center">
+      <div id="closing-logo" style="opacity:0;">
+        <div class="text-2xl font-bold tracking-widest" style="color:#e50914;">FFWD</div>
+        <div class="text-sm tracking-wider text-gray-500 mt-1">NEWS OVERVIEW</div>
+      </div>
+      <h2 id="closing-text" class="text-5xl font-black text-white mt-8" style="opacity:0;">
+        Stay informed.<br>Stay ahead.
+      </h2>
+      <div id="closing-bar" style="width:0; height:3px; background:#e50914; margin:30px auto 0; border-radius:2px;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const tl = gsap.timeline({ paused: true });
+
+  // Scene 1: Headline (0-4s)
+  tl.fromTo('#scene-headline', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0)
+    .fromTo('#headline-text', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0.3)
+    .to('#headline-underline', { width: 300, duration: 0.6, ease: 'power2.out' }, 0.8)
+    .to('#scene-headline', { opacity: 0, duration: 0.3 }, 3.7);
+
+  // Scene 2: B-Roll 1 (4-10s)
+  tl.fromTo('#scene-broll1', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 4.0)
+    .fromTo('#stat-number', { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.7, ease: 'back.out(1.7)' }, 4.3)
+    .fromTo('#stat-label', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, 4.8)
+    .to('#scene-broll1', { opacity: 0, duration: 0.3 }, 9.7);
+
+  // Scene 3: B-Roll 2 (10-17s)
+  tl.fromTo('#scene-broll2', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 10.0)
+    .fromTo('#quote-block', { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 10.3)
+    .to('#scene-broll2', { opacity: 0, duration: 0.3 }, 16.7);
+
+  // Scene 4: B-Roll 3 (17-24s)
+  tl.fromTo('#scene-broll3', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 17.0)
+    .fromTo('#fact-card-1', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, 17.3)
+    .fromTo('#fact-card-2', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, 17.6)
+    .fromTo('#fact-card-3', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, 17.9)
+    .to('#scene-broll3', { opacity: 0, duration: 0.3 }, 23.7);
+
+  // Scene 5: Closing (24-30s)
+  tl.fromTo('#scene-closing', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 24.0)
+    .fromTo('#closing-logo', { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: 'power2.out' }, 24.3)
+    .fromTo('#closing-text', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, 24.8)
+    .to('#closing-bar', { width: 200, duration: 0.5, ease: 'power2.out' }, 25.5);
+
+  // Expose for Hyperframes
+  window.__timelines = [tl];
+  window.__duration = 30;
+
+  window.addEventListener('hf-seek', function(e) {
+    var t = (e && e.detail && e.detail.time != null) ? e.detail.time : 0;
+    tl.time(t);
+    tl.pause();
+  });
+})();
+</script>
+</body>
+</html>
