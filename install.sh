@@ -4,6 +4,7 @@
 #  Choose your agent backend and get cooking.
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 set -e
+exec < /dev/tty
 
 BOLD='\033[1m'
 RED='\033[0;31m'
@@ -63,7 +64,7 @@ choose_agent() {
   echo ""
   
   while true; do
-    read -rp "  Enter choice [1/2/3]: " choice < /dev/tty
+    read -rp "  Enter choice [1/2/3]: " choice
     case $choice in
       1) AGENT="openclaw"; break;;
       2) AGENT="agent0"; break;;
