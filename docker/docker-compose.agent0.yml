@@ -1,7 +1,6 @@
 # Video Kitchen + Agent0
 # Open-source autonomous agent framework
 # https://github.com/agent0hq/agent0
-version: "3.8"
 
 services:
   video-kitchen-dashboard:
@@ -10,7 +9,8 @@ services:
       dockerfile: Dockerfile.dashboard
     container_name: vk-dashboard
     restart: unless-stopped
-    networks: [vk-net]
+    environment:
+      - VK_WORKSPACE=/workspace
     volumes:
       - vk-workspace:/workspace
       - ${RAW_FOOTAGE_PATH:-./raw_footage}:/workspace/raw_footage:ro
@@ -22,7 +22,6 @@ services:
     image: ghcr.io/agent0hq/agent0:latest
     container_name: vk-agent0
     restart: unless-stopped
-    networks: [vk-net]
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
@@ -35,3 +34,6 @@ services:
       - ../AGENTS.md:/workspace/AGENTS.md:ro
     depends_on:
       - video-kitchen-dashboard
+
+volumes:
+  vk-workspace:

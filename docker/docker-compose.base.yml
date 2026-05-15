@@ -1,8 +1,0 @@
-# ─── Video Kitchen Box — Shared volumes ───
-
-volumes:
-  vk-workspace:
-
-networks:
-  vk-net:
-    driver: bridge
