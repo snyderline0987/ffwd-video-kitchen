@@ -1,10 +1,10 @@
 # Video Kitchen + OpenClaw Agent
-# The original — AI agent powered by OpenClaw with Telegram/Discord/Signal
+# The original — AI agent powered by OpenClaw
 
 services:
   video-kitchen:
     build:
-      context: ..
+      context: .
       dockerfile: Dockerfile
     container_name: vk-openclaw
     restart: unless-stopped
@@ -20,9 +20,9 @@ services:
       - vk-workspace:/workspace
       - ${RAW_FOOTAGE_PATH:-./raw_footage}:/workspace/raw_footage:ro
     ports:
-      - "3000:3000"   # OpenClaw agent
-      - "8080:8080"   # Dashboard
-      - "3002:3002"   # HyperFrames preview
+      - "3000:3000"
+      - "8080:8080"
+      - "3002:3002"
 
 volumes:
   vk-workspace:

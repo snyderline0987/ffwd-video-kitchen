@@ -4,7 +4,7 @@
 services:
   video-kitchen-dashboard:
     build:
-      context: ..
+      context: .
       dockerfile: Dockerfile.dashboard
     container_name: vk-dashboard
     restart: unless-stopped
@@ -14,8 +14,8 @@ services:
       - vk-workspace:/workspace
       - ${RAW_FOOTAGE_PATH:-./raw_footage}:/workspace/raw_footage:ro
     ports:
-      - "8080:8080"   # Dashboard
-      - "3002:3002"   # HyperFrames preview
+      - "8080:8080"
+      - "3002:3002"
 
   hermes:
     image: ghcr.io/nicepkg/hermes:latest
@@ -29,10 +29,10 @@ services:
       - HERMES_CONFIG=/workspace/hermes.yaml
     volumes:
       - vk-workspace:/workspace
-      - ../skills:/skills:ro
-      - ../AGENTS.md:/workspace/AGENTS.md:ro
+      - ./skills:/skills:ro
+      - ./AGENTS.md:/workspace/AGENTS.md:ro
     ports:
-      - "4000:4000"   # Hermes API
+      - "4000:4000"
     depends_on:
       - video-kitchen-dashboard
 
