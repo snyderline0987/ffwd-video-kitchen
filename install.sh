@@ -63,7 +63,7 @@ choose_agent() {
   echo ""
   
   while true; do
-    read -rp "  Enter choice [1/2/3]: " choice
+    read -rp "  Enter choice [1/2/3]: " choice < /dev/tty
     case $choice in
       1) AGENT="openclaw"; break;;
       2) AGENT="agent0"; break;;
