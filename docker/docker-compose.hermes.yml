@@ -1,0 +1,39 @@
+# Video Kitchen + Hermes Agent
+# Multi-model agent orchestration
+# https://github.com/nicepkg/hermes
+version: "3.8"
+
+services:
+  video-kitchen-dashboard:
+    build:
+      context: ..
+      dockerfile: Dockerfile.dashboard
+    container_name: vk-dashboard
+    restart: unless-stopped
+    networks: [vk-net]
+    volumes:
+      - vk-workspace:/workspace
+      - ${RAW_FOOTAGE_PATH:-./raw_footage}:/workspace/raw_footage:ro
+    ports:
+      - "8080:8080"   # Dashboard
+      - "3002:3002"   # HyperFrames preview
+
+  hermes:
+    image: ghcr.io/nicepkg/hermes:latest
+    container_name: vk-hermes
+    restart: unless-stopped
+    networks: [vk-net]
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - HERMES_WORKSPACE=/workspace
+      - HERMES_CONFIG=/workspace/hermes.yaml
+    volumes:
+      - vk-workspace:/workspace
+      - ../skills:/skills:ro
+      - ../AGENTS.md:/workspace/AGENTS.md:ro
+    ports:
+      - "4000:4000"   # Hermes API
+    depends_on:
+      - video-kitchen-dashboard

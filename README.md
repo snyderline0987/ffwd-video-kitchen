@@ -12,21 +12,45 @@ Video Kitchen turns raw footage into edited videos using AI-powered agent skills
 
 ## Quick Start
 
+### One-command install (recommended)
+
+```bash
+curl -sL https://raw.githubusercontent.com/snyderline0987/video-kitchen-box/main/install.sh | bash
+```
+
+This will ask you to choose an agent backend:
+
+| # | Agent | Best for |
+|---|-------|----------|
+| 1 | **OpenClaw** | Production use, Telegram/Discord/Signal chat |
+| 2 | **Agent0** | Headless automation, custom pipelines |
+| 3 | **Hermes** | Multi-model orchestration, API-driven |
+
+### Manual setup
+
 ```bash
 # 1. Clone
 git clone https://github.com/snyderline0987/video-kitchen-box.git
 cd video-kitchen-box
 
-# 2. Configure
+# 2. Pick your agent
+# OpenClaw:
+cp docker/docker-compose.openclaw.yml docker-compose.yml
+# Agent0:
+cp docker/docker-compose.agent0.yml docker-compose.yml
+# Hermes:
+cp docker/docker-compose.hermes.yml docker-compose.yml
+
+# 3. Configure
 cp .env.example .env
-# Edit .env with your API keys (Gemini, OpenAI, or OpenRouter)
+# Edit .env with your API keys
 
-# 3. Launch
-docker-compose up -d
+# 4. Launch
+docker compose up -d
 
-# 4. Use
-# Dashboard: http://localhost:8080
-# Agent Chat: http://localhost:3000
+# 5. Use
+# Dashboard: http://localhost:8080/dashboard.html
+# Agent: http://localhost:3000 (OpenClaw)
 ```
 
 ## Architecture

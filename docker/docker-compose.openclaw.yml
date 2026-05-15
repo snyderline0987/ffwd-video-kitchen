@@ -1,0 +1,27 @@
+# Video Kitchen + OpenClaw Agent
+# The original — AI agent powered by OpenClaw with Telegram/Discord/Signal
+version: "3.8"
+
+services:
+  video-kitchen:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: vk-openclaw
+    restart: unless-stopped
+    networks: [vk-net]
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - DISCORD_TOKEN=${DISCORD_TOKEN:-}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - SIGNAL_PHONE=${SIGNAL_PHONE:-}
+      - TS_AUTHKEY=${TS_AUTHKEY:-}
+    volumes:
+      - vk-workspace:/workspace
+      - ${RAW_FOOTAGE_PATH:-./raw_footage}:/workspace/raw_footage:ro
+    ports:
+      - "3000:3000"   # OpenClaw agent
+      - "8080:8080"   # Dashboard
+      - "3002:3002"   # HyperFrames preview
