@@ -12,10 +12,17 @@ Video Kitchen turns raw footage into edited videos using AI-powered agent skills
 
 ## Quick Start
 
-### One-command install (recommended)
+### One-command install
 
 ```bash
-curl -sL https://raw.githubusercontent.com/snyderline0987/video-kitchen-box/main/install.sh | bash
+# OpenClaw (full agent + Telegram/Discord/Signal)
+curl -sL https://raw.githubusercontent.com/snyderline0987/video-kitchen-box/main/install.sh | bash -s -- openclaw
+
+# Agent0 (headless autonomous agent)  
+curl -sL https://raw.githubusercontent.com/snyderline0987/video-kitchen-box/main/install.sh | bash -s -- agent0
+
+# Hermes (multi-model orchestration)
+curl -sL https://raw.githubusercontent.com/snyderline0987/video-kitchen-box/main/install.sh | bash -s -- hermes
 ```
 
 This will ask you to choose an agent backend:
