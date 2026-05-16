@@ -1,0 +1,17 @@
+{
+  "id": "stadtgespraech-insert",
+  "title": "Stadtgespräch Insert",
+  "description": "W24 Stadtgespräch lower-third name insert. Stepped yellow bar with textured fill, name + role text in the main block, STADTGESPRÄCH label on the left.",
+  "aspect_ratio": "16:9",
+  "resolution": "1920x1080",
+  "duration": "6.7s",
+  "params": ["name", "role"],
+  "defaults": {
+    "name": "Vornamen Nachnamen",
+    "role": "Subline Funktion"
+  },
+  "palette": ["#E6C828", "#0a0a0a"],
+  "fonts": ["Inter"],
+  "hasFillVideo": true,
+  "tags": ["lower-third", "stadtgespraech", "w24", "name-insert"]
+}

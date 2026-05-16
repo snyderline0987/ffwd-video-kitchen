@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>Stadtgespräch Insert</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: transparent; overflow: hidden; width: 1920px; height: 1080px; font-family: 'Inter', sans-serif; }
+
+  .canvas {
+    position: relative;
+    width: 1920px; height: 1080px;
+    overflow: hidden;
+  }
+
+  .trans-grid {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image:
+      linear-gradient(45deg, #e0e0e0 25%, transparent 25%),
+      linear-gradient(-45deg, #e0e0e0 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #e0e0e0 75%),
+      linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  #fill-video {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  /* Text overlay — positioned inside the yellow bar */
+  #text-overlay {
+    position: absolute;
+    left: 29.4%;
+    top: 84%;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+  }
+
+  #sg-name {
+    color: #000;
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: 0.2px;
+  }
+
+  #sg-role {
+    color: rgba(0,0,0,0.75);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-top: 2px;
+  }
+
+  /* Config panel */
+  .sg-config {
+    position: fixed; top: 20px; right: 20px;
+    background: rgba(0,0,0,0.92); border: 1px solid #333;
+    border-radius: 12px; padding: 24px;
+    pointer-events: all; display: none;
+    color: #fff; font-size: 14px;
+    backdrop-filter: blur(12px); z-index: 100;
+    font-family: 'Inter', sans-serif;
+  }
+  .sg-config.show { display: block; }
+  .sg-config h3 { margin-bottom: 16px; font-size: 16px; font-weight: 700; }
+  .sg-config label { display: block; margin-bottom: 4px; color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .sg-config input {
+    background: #1a1a1a; border: 1px solid #333; color: #fff;
+    padding: 8px 12px; border-radius: 6px; width: 300px; margin-bottom: 14px;
+    font-family: 'Inter', sans-serif; font-size: 14px;
+  }
+  .sg-config input:focus { outline: none; border-color: #E6C828; }
+  .sg-config button {
+    background: #E6C828; color: #000; border: none; padding: 10px 24px;
+    border-radius: 6px; cursor: pointer; font-weight: 700; margin-right: 8px;
+  }
+  .sg-config button.secondary { background: #333; color: #fff; }
+
+  .loop-badge {
+    position: fixed; bottom: 16px; left: 16px;
+    background: rgba(0,0,0,0.7); color: #E6C828;
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; font-family: 'Inter', sans-serif;
+    pointer-events: none; z-index: 50;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="canvas">
+  <div class="trans-grid"></div>
+  <video id="fill-video" src="media/fill.webm" autoplay loop muted playsinline></video>
+  <div id="text-overlay">
+    <div id="sg-name">Vornamen Nachnamen</div>
+    <div id="sg-role">Subline Funktion</div>
+  </div>
+</div>
+
+<div class="loop-badge">↻ LOOP</div>
+
+<div class="sg-config" id="sg-config">
+  <h3>📺 Stadtgespräch Insert</h3>
+  <label>Name</label>
+  <input id="cfg-name" value="Vornamen Nachnamen" />
+  <label>Funktion</label>
+  <input id="cfg-role" value="Subline Funktion" />
+  <button onclick="applyConfig()">Anwenden</button>
+  <button class="secondary" onclick="replayAnimation()">▶ Replay</button>
+  <button class="secondary" onclick="document.getElementById('sg-config').classList.remove('show')">✕ Close</button>
+</div>
+
+<script>
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('name')) { document.getElementById('sg-name').textContent = params.get('name'); document.getElementById('cfg-name').value = params.get('name'); }
+  if (params.get('role')) { document.getElementById('sg-role').textContent = params.get('role'); document.getElementById('cfg-role').value = params.get('role'); }
+
+  var video = document.getElementById('fill-video');
+  var tl;
+
+  function buildTimeline() {
+    if (tl) { tl.kill(); }
+    tl = gsap.timeline({ paused: true, repeat: -1, repeatDelay: 1 });
+
+    gsap.set('#text-overlay', { opacity: 0, y: 15 });
+
+    // Text fades in after the bar reveals (~1s into the fill video)
+    tl.to('#text-overlay', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 1.0);
+
+    // Hold through the animation
+    // Text fades out before exit
+    tl.to('#text-overlay', { opacity: 0, y: -10, duration: 0.3, ease: 'power2.in' }, 5.2);
+
+    window.__timelines = [tl];
+    window.__duration = 6.7;
+    return tl;
+  }
+
+  video.addEventListener('playing', function() {
+    buildTimeline();
+    tl.play();
+  });
+
+  if (!video.paused) {
+    buildTimeline();
+    tl.play();
+  }
+
+  window.addEventListener('hf-seek', function(e) {
+    var t = (e && e.detail && e.detail.time != null) ? e.detail.time : 0;
+    if (tl) { tl.time(t); tl.pause(); }
+    video.currentTime = t;
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'e' || e.key === 'E') {
+      document.getElementById('sg-config').classList.add('show');
+    }
+  });
+
+  window.applyConfig = function() {
+    document.getElementById('sg-name').textContent = document.getElementById('cfg-name').value;
+    document.getElementById('sg-role').textContent = document.getElementById('cfg-role').value;
+  };
+
+  window.replayAnimation = function() {
+    video.currentTime = 0;
+    gsap.set('#text-overlay', { opacity: 0, y: 15 });
+    buildTimeline();
+    tl.play();
+  };
+})();
+</script>
+</body>
+</html>
