@@ -194,6 +194,8 @@
       sw.classList.add('active');
       selectedColor = sw.getAttribute('data-color');
       document.getElementById('cfg-color').value = selectedColor;
+      // Apply color immediately
+      bar.style.background = selectedColor;
     });
   });
 
