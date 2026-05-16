@@ -513,7 +513,7 @@
                             </div>
                             <p class="text-gray-400 mb-4 text-sm flex-1">${t.description}</p>
                             <div class="w-full ${isVertical ? 'mx-auto' : ''} bg-[#000] border border-gray-700 rounded overflow-hidden relative mb-4 iframe-wrapper" style="aspect-ratio: ${ratio}; ${previewMaxW}">
-                                <iframe src="${tagUrl}" class="absolute top-0 left-0 w-[${iframeW}px] h-[${iframeH}px] pointer-events-none origin-top-left scaled-iframe"></iframe>
+                                <iframe src="${tagUrl}" class="absolute top-0 left-0 pointer-events-none origin-top-left scaled-iframe" style="width:${iframeW}px;height:${iframeH}px;"></iframe>
                             </div>
                             ${paletteHtml}
                             ${tagsHtml}
@@ -543,6 +543,10 @@
             });
         }
         window.addEventListener('resize', resizeIframe);
+        // Also resize on tab switch
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => setTimeout(resizeIframe, 100));
+        });
     </script>
 </body>
 </html>
