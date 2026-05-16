@@ -7,3 +7,4 @@ raw_footage/
 *.webm
 !skills/video-kitchen/recipes/public/opener.webm
 !skills/open-design/examples/opener.webm
+!skills/video-kitchen/recipes/reference-renders/**/*.mp4
