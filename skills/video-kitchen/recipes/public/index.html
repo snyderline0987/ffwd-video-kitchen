@@ -38,6 +38,7 @@
             <button class="tab-btn active" onclick="switchTab('projects', event)">Recent Projects</button>
             <button class="tab-btn" onclick="switchTab('recipes', event)">Recipe Blueprints</button>
             <button class="tab-btn" onclick="switchTab('design', event)">Motion Templates</button>
+            <button class="tab-btn" onclick="switchTab('references', event)">Reference Renders</button>
             <button class="tab-btn" onclick="switchTab('chat', event)">Agent Chat</button>
         </div>
     </header>
@@ -163,7 +164,14 @@
             </div>
         </div>
 
-        <!-- Chat Tab -->
+        <!-- Reference Renders Tab -->
+        <div id="tab-references" class="tab-content">
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="reference-grid">
+                <!-- Loaded via JS -->
+            </div>
+        </div>
+
+<!-- Chat Tab -->
         <div id="tab-chat" class="tab-content">
             <div class="w-full h-full border border-gray-800 rounded-lg bg-[#111] min-h-[70vh] flex flex-col items-center justify-center text-center">
                 <div class="text-6xl mb-4">🤖</div>
@@ -414,9 +422,49 @@
             loadRecipes();
         }
 
+        async function loadReferenceRenders() {
+            const grid = document.getElementById('reference-grid');
+            grid.innerHTML = '';
+            try {
+                const res = await fetch('/api/reference-renders');
+                if (!res.ok) return;
+                const refs = await res.json();
+                if (refs.length === 0) {
+                    grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">No reference renders yet. Run a recipe and save the result here.</div>';
+                    return;
+                }
+                refs.forEach(r => {
+                    const videoFile = r.files && r.files.length > 0 ? r.files[0] : null;
+                    const videoHtml = videoFile ? `<video src="reference-renders/${r.id}/${videoFile}" class="w-full rounded border border-gray-700" style="max-height:180px" controls muted playsinline></video>` : '';
+                    const compLink = r.hasComp ? `<a href="reference-renders/${r.id}/composition.html" target="_blank" class="text-xs text-gray-400 hover:text-red-400 underline">View Composition</a>` : '';
+                    grid.innerHTML += `
+                        <div class="card p-6 rounded-lg flex flex-col h-full">
+                            <div class="flex justify-between items-start mb-3">
+                                <h2 class="text-lg font-bold leading-tight">${r.title || r.id}</h2>
+                                <div class="flex gap-1">
+                                    ${r.bpm ? `<span class="badge">${r.bpm} BPM</span>` : ''}
+                                    <span class="badge">${r.duration || ''}</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4 flex-1">${r.description || ''}</p>
+                            ${videoHtml}
+                            <div class="mt-4 bg-[#111] p-3 rounded text-xs border border-gray-800 space-y-1">
+                                ${r.recipe ? `<div class="text-gray-500"><span class="font-bold text-gray-300">Recipe:</span> ${r.recipe}</div>` : ''}
+                                ${r.theory ? `<div class="text-gray-500"><span class="font-bold text-gray-300">Theory:</span> <span class="theory-badge px-1 rounded text-red-400">${r.theory}</span></div>` : ''}
+                                ${r.music ? `<div class="text-gray-500"><span class="font-bold text-gray-300">Music:</span> ${r.music}</div>` : ''}
+                                ${r.source ? `<div class="text-gray-500"><span class="font-bold text-gray-300">Source:</span> ${r.source}</div>` : ''}
+                                ${compLink}
+                            </div>
+                        </div>`;
+                });
+            } catch(e) { /* ignore */ }
+        }
+
         // Init
         loadProjects();
         loadRecipes();
+        loadReferenceRenders();
+        loadReferenceRenders();
         // Also load templates into Motion Templates tab
         loadTemplates();
 

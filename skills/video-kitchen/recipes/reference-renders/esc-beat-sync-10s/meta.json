@@ -1,0 +1,16 @@
+{
+  "title": "ESC Halbfinale — Schnittbilder auf Musik (10s)",
+  "description": "10s Fast-Cut Beat Sync. 103.4 BPM, Eisenstein metric montage. 9 cuts in 10 seconds, every ~1.2s on the beat. ESC Halbfinale B-Roll, music only.",
+  "recipe": "schnittbilder_auf_musik",
+  "theory": "Eisenstein (Metric Montage)",
+  "bpm": 103.4,
+  "duration": "10s",
+  "source": "w24.at ESC Halbfinale 2025",
+  "music": "Shelter to the Valley",
+  "clips": 9,
+  "cut_interval": "~1.2s on beats",
+  "crossfade": "0.1s",
+  "resolution": "1280x720",
+  "render_size": "6.7MB",
+  "date": "2026-05-16"
+}

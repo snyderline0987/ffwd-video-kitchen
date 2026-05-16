@@ -1,0 +1,43 @@
+{
+  "id": "schnittbilder_auf_musik",
+  "title": "Schnittbilder auf Musik",
+  "aspect_ratio": "16:9",
+  "duration": "10-30s",
+  "description": "Schnitt auf den Beat. Eisenstein-Montage: jeder Schnitt landet exakt auf einem Beat/Downbeat. Kein VO, nur Musik + B-Roll. Perfekt für Teaser, Social Clips, Promo.",
+  "theory": "Eisenstein (Metric Montage)",
+  "prompt": "Analysiere die Musik mit beat_analyze.py. Schneide B-Roll auf jeden Beat oder Downbeat. Schnelle Rhythmen = schnelle Schnitte. Kein Voiceover.",
+  "music_pref": "Beliebig — BPM bestimmt Schnittgeschwindigkeit",
+  "cut_style": "Eisenstein Metric: Jeder Schnitt auf den Beat. Crossfade 0.1-0.2s. Beat-Flash Overlay optional.",
+  "pipeline": [
+    "beat_analyze.py music.mp3 --clips N --duration D --theory eisenstein --output cutlist.json",
+    "Map cutlist → HyperFrames data-start/data-duration (alternating track-index 0/1 for crossfades)",
+    "Add <audio> on track 2 for music",
+    "Optional: beat-flash overlay on every beat for visual pulse",
+    "Render with HyperFrames"
+  ],
+  "variants": {
+    "fast_10s": {
+      "description": "10s, ~1.2s pro Clip, ~8-9 Schnitte",
+      "beat_type": "beats",
+      "crossfade": 0.1,
+      "min_clip": 0.5
+    },
+    "medium_15s": {
+      "description": "15s, ~2s pro Clip, ~7-8 Schnitte",
+      "beat_type": "downbeats",
+      "crossfade": 0.15,
+      "min_clip": 1.0
+    },
+    "slow_30s": {
+      "description": "30s, ~4s pro Clip, ~7 Schnitte auf Downbeats",
+      "beat_type": "downbeats",
+      "crossfade": 0.2,
+      "min_clip": 2.0
+    }
+  },
+  "dependencies": [
+    "beat-sync skill (librosa)",
+    "hyperframes skill",
+    "gsap skill"
+  ]
+}

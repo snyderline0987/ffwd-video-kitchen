@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #000; overflow: hidden; font-family: 'Helvetica Neue', Arial, sans-serif; }
+
+#esc-10s-beat {
+  position: relative;
+  width: 1280px;
+  height: 720px;
+  overflow: hidden;
+  background: #000;
+}
+
+.clip-video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 1280px;
+  height: 720px;
+  object-fit: cover;
+}
+
+#beat-flash {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: white;
+  pointer-events: none;
+  opacity: 0;
+}
+
+#ticker {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 3px;
+  background: #c4161c;
+}
+
+/* Countdown-style beat bars */
+.beat-bar {
+  position: absolute;
+  bottom: 8px;
+  height: 3px;
+  background: rgba(255,255,255,0.4);
+  opacity: 0;
+}
+</style>
+</head>
+<body>
+
+<div data-composition-id="esc-10s-beat" data-width="1280" data-height="720" data-start="0">
+
+  <!-- Fast beat-cut montage — 103.4 BPM, cuts every ~1.2s on beats -->
+  <!-- 8 cuts across 10s, alternating track 0/1 for crossfades -->
+
+  <!-- Clip 0: Establishing — 0.0 → 1.35 -->
+  <video id="clip-0" class="clip-video" src="clip_00_establishing.mp4"
+    data-start="0" data-duration="1.35" data-track-index="0" muted playsinline></video>
+
+  <!-- Clip 1: Signage — 1.35 → 2.53 -->
+  <video id="clip-1" class="clip-video" src="clip_01_signage.mp4"
+    data-start="1.35" data-duration="1.18" data-track-index="1" muted playsinline></video>
+
+  <!-- Clip 2: Crowd flags — 2.53 → 3.69 -->
+  <video id="clip-2" class="clip-video" src="clip_02_crowd_flags.mp4"
+    data-start="2.53" data-duration="1.16" data-track-index="0" muted playsinline></video>
+
+  <!-- Clip 3: Interview A — 3.69 → 4.85 -->
+  <video id="clip-3" class="clip-video" src="clip_03_interview_a.mp4"
+    data-start="3.69" data-duration="1.17" data-track-index="1" muted playsinline></video>
+
+  <!-- Clip 4: Interview B — 4.85 → 6.06 -->
+  <video id="clip-4" class="clip-video" src="clip_04_interview_b.mp4"
+    data-start="4.85" data-duration="1.21" data-track-index="0" muted playsinline></video>
+
+  <!-- Clip 5: Crowd day — 6.06 → 7.22 -->
+  <video id="clip-5" class="clip-video" src="clip_05_crowd_day.mp4"
+    data-start="6.06" data-duration="1.16" data-track-index="1" muted playsinline></video>
+
+  <!-- Clip 6: Wide night — 7.22 → 8.41 -->
+  <video id="clip-6" class="clip-video" src="clip_06_wide_night.mp4"
+    data-start="7.22" data-duration="1.19" data-track-index="0" muted playsinline></video>
+
+  <!-- Clip 0 again: Establishing — 8.41 → 9.57 -->
+  <video id="clip-7" class="clip-video" src="clip_00_establishing.mp4"
+    data-start="8.41" data-duration="1.16" data-track-index="1" muted playsinline></video>
+
+  <!-- Clip 2 again: Crowd flags — 9.57 → 10.0 -->
+  <video id="clip-8" class="clip-video" src="clip_02_crowd_flags.mp4"
+    data-start="9.57" data-duration="0.43" data-track-index="0" muted playsinline></video>
+
+  <!-- Music (first 10s) -->
+  <audio id="bgm" src="music_31s.wav"
+    data-start="0" data-duration="10" data-track-index="2"></audio>
+
+  <!-- Beat flash overlay -->
+  <div id="beat-flash" class="clip" data-start="0" data-duration="10"></div>
+
+  <!-- Red accent ticker -->
+  <div id="ticker" class="clip" data-start="0" data-duration="10"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script>
+window.__timelines = window.__timelines || {};
+var tl = gsap.timeline({ paused: true });
+
+var XF = 0.1;
+
+// Beat positions from librosa analysis (103.4 BPM)
+var cuts = [1.35, 2.53, 3.69, 4.85, 6.06, 7.22, 8.41, 9.57];
+var clipIds = ["#clip-0","#clip-1","#clip-2","#clip-3","#clip-4","#clip-5","#clip-6","#clip-7","#clip-8"];
+
+// Clip 0 entrance
+tl.from("#clip-0", { opacity: 0, duration: XF, ease: "power2.out" }, 0);
+
+// Crossfade chain — every cut on a beat
+for (var i = 0; i < cuts.length; i++) {
+  tl.from(clipIds[i + 1], { opacity: 0, duration: XF, ease: "power2.out" }, cuts[i]);
+  tl.to(clipIds[i], { opacity: 0, duration: XF, ease: "power2.in" }, cuts[i]);
+}
+
+// Final fade to black
+tl.to("#clip-8", { opacity: 0, duration: 0.3, ease: "power2.in" }, 9.7);
+
+// Beat flash on every beat in 10s
+var beats = [0.209,0.766,1.347,1.927,2.531,3.111,3.692,4.272,4.853,5.457,6.060,6.641,7.221,7.825,8.406,8.986,9.567];
+beats.forEach(function(t) {
+  tl.to("#beat-flash", { opacity: 0.1, duration: 0.03, overwrite: "auto" }, t);
+  tl.to("#beat-flash", { opacity: 0, duration: 0.1, overwrite: "auto" }, t + 0.03);
+});
+
+window.__timelines["esc-10s-beat"] = tl;
+</script>
+</div>
+</body>
+</html>

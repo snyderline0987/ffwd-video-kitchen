@@ -116,4 +116,40 @@ app.get('/api/projects', (req, res) => {
     } catch(e) { console.error('Projects error:', e); res.json([]); }
 });
 
+app.get('/api/reference-renders', (req, res) => {
+    const references = [];
+    const refDir = path.join(__dirname, 'reference-renders');
+    if (!fs.existsSync(refDir)) {
+        res.json(references);
+        return;
+    }
+    fs.readdirSync(refDir, { withFileTypes: true })
+        .filter(d => d.isDirectory())
+        .forEach(dirent => {
+            const dir = dirent.name;
+            const metaPath = path.join(refDir, dir, 'meta.json');
+            const meta = readJsonSafe(metaPath) || {};
+            // Find video files
+            const files = fs.readdirSync(path.join(refDir, dir))
+                .filter(f => f.endsWith('.mp4') || f.endsWith('.webm'));
+            if (files.length > 0 || meta.title) {
+                references.push({
+                    id: dir,
+                    title: meta.title || dir,
+                    description: meta.description || '',
+                    recipe: meta.recipe || '',
+                    theory: meta.theory || '',
+                    bpm: meta.bpm || '',
+                    duration: meta.duration || '',
+                    files: files,
+                    hasComp: fs.existsSync(path.join(refDir, dir, 'composition.html')),
+                    ...meta
+                });
+            }
+        });
+    res.json(references);
+});
+
+app.use('/reference-renders', express.static(path.join(__dirname, 'reference-renders')));
+
 app.listen(8080, () => console.log('Listening on port 8080'));
