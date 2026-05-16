@@ -275,29 +275,12 @@
 
         // Projects Logic
 
-        async function startStudio(projectId) {
-            const btn = event.target.closest('button');
-            btn.innerHTML = 'Starting...';
-            btn.disabled = true;
-            try {
-                const res = await fetch('/api/start-studio', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ projectId })
-                });
-                const data = await res.json();
-                if (data.url) {
-                    btn.innerHTML = 'Opening...';
-                    window.open(data.url, '_blank');
-                    setTimeout(() => loadProjects(), 2000); // refresh to show cloud link
-                } else {
-                    btn.innerHTML = data.error || 'Failed';
-                    setTimeout(() => { btn.innerHTML = 'Start Studio <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>'; btn.disabled = false; }, 3000);
-                }
-            } catch(e) {
-                btn.innerHTML = 'Error';
-                setTimeout(() => { btn.innerHTML = 'Start Studio <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>'; btn.disabled = false; }, 3000);
-            }
+        function copyToClipboard(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                const orig = btn.innerHTML;
+                btn.innerHTML = '✓ Copied!';
+                setTimeout(() => { btn.innerHTML = orig; }, 1500);
+            });
         }
 
         async function loadProjects() {
@@ -315,7 +298,8 @@
                         badgeHtml += `<span class="bg-gray-800 text-xs px-2 py-1 rounded border border-gray-700">${c}</span>`;
                     });
                     
-                    let linkHtml = p.cloudUrl ? `<a href="${p.cloudUrl}" target="_blank" class="text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm font-bold w-full text-center mt-auto flex justify-center items-center gap-2 transition">Open Cloud Studio <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></a>` : `<button onclick="startStudio('${p.id}')" class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-sm font-bold w-full text-center mt-auto flex justify-center items-center gap-2 transition cursor-pointer">Start Studio <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button>`;
+                    const projectInfo = `Project: ${p.label} (${p.id})\nCompositions: ${p.compositions.join(', ') || 'none'}\nRenders: ${p.renderCount}\nPath: /workspace/${p.id}`;
+                    let linkHtml = `<button onclick="copyToClipboard(\`${projectInfo.replace(/`/g, "'")}\`, this)" class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-sm font-bold w-full text-center mt-auto flex justify-center items-center gap-2 transition cursor-pointer">📋 Copy Info</button>`;
 
                     container.innerHTML += `
                         <div class="card p-6 rounded-lg flex flex-col min-h-[160px]">
@@ -401,6 +385,9 @@
                             ${r.has_composition ? `<a href="${compSrc}" target="_blank" class="flex-1 text-center py-2 bg-red-700 hover:bg-red-600 text-white font-semibold rounded transition text-sm">▶ Preview</a>` : ''}
                             <button onclick='openModal(${JSON.stringify(r).replace(/'/g, "&#39;")})' class="flex-1 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-sm">
                                 ⚙️ Edit
+                            </button>
+                            <button onclick="copyToClipboard('Recipe: ${r.title} (${r.id})\nAspect: ${r.aspect_ratio} | Duration: ${r.duration}\nTheory: ${r.theory || 'none'}\nPrompt: ${r.prompt || ''}\nMusic: ${r.music_pref || ''}\nCut Style: ${r.cut_style || ''}', this)" class="flex-1 text-center py-2 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded transition text-sm cursor-pointer">
+                                📋 Copy
                             </button>
                         </div>
                     </div>
@@ -545,7 +532,7 @@
                             ${tagsHtml}
                             <div class="mt-auto flex gap-2 pt-3">
                                 <a href="${tagUrl}" target="_blank" class="w-1/2 text-center py-2 bg-red-700 hover:bg-red-600 text-white font-semibold rounded transition text-xs block">▶ Preview</a>
-                                <button onclick="navigator.clipboard.writeText('${tagUrl}${paramStr}')" class="w-1/2 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-xs">Copy Tag</button>
+                                <button onclick="copyToClipboard('Template: ${t.title} (${t.id})\nAspect: ${t.aspect_ratio} | Resolution: ${t.resolution}\nDuration: ${t.duration}\nParams: ${t.params ? t.params.join(', ') : 'none'}\nDefaults: ${t.defaults ? JSON.stringify(t.defaults) : '{}'}\nTags: ${t.tags ? t.tags.join(', ') : ''}\nURL: ${tagUrl}${paramStr}', this)" class="w-1/2 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-xs cursor-pointer">📋 Copy Info</button>
                             </div>
                         </div>`;
                 });
