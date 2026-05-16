@@ -32,6 +32,19 @@
     font-family: 'WienerMelange', sans-serif;
   }
 
+  /* Dashboard preview mode — dark bg, bar centered */
+  body.preview-mode {
+    background: #1a1a1a;
+  }
+  body.preview-mode .trans-grid { display: none; }
+  body.preview-mode .content {
+    align-items: center;
+    justify-content: center;
+  }
+  body.preview-mode #bb-bar {
+    margin-top: 0;
+  }
+
   .canvas {
     position: relative;
     width: 100vw;
@@ -200,6 +213,8 @@
   });
 
   var params = new URLSearchParams(window.location.search);
+  var isPreview = params.get('preview') === '1' || params.has('preview');
+  if (isPreview) { document.body.classList.add('preview-mode'); }
   if (params.get('name')) { document.getElementById('bb-name').textContent = params.get('name'); document.getElementById('cfg-name').value = params.get('name'); }
   if (params.get('role')) { document.getElementById('bb-role').textContent = params.get('role'); document.getElementById('cfg-role').value = params.get('role'); }
   if (params.get('color')) {
