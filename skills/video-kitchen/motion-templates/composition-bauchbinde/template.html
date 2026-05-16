@@ -156,7 +156,7 @@
   <label>Dauer (Sekunden)</label>
   <input id="cfg-duration" type="number" value="5" min="2" max="20" />
   <button onclick="applyConfig()">Anwenden</button>
-  <button class="secondary" onclick="replayAnimation()">▶ Replay</button>
+  <button class="secondary" onclick="replayAnimation()">▶ Replay</button> <button class="secondary" onclick="document.getElementById('bb-config').classList.remove('show')">✕ Close</button>
 </div>
 
 <script>
@@ -224,7 +224,7 @@
 
   document.addEventListener('keydown', function(e) {
     if (e.key === 'e' || e.key === 'E') {
-      document.getElementById('bb-config').classList.toggle('show');
+      document.getElementById('bb-config').classList.add('show');
     }
   });
 

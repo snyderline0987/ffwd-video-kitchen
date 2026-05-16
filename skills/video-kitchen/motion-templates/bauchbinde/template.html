@@ -136,7 +136,7 @@
   <label>Animation Duration (seconds)</label>
   <input id="cfg-duration" type="number" value="5" min="3" max="15" />
   <button onclick="applyConfig()">Apply</button>
-  <button onclick="replayAnimation()" style="background:#333;">▶ Replay</button>
+  <button onclick="replayAnimation()" style="background:#333;">▶ Replay</button> <button onclick="document.getElementById('bb-config').classList.remove('show')" style="background:#333;">✕ Close</button>
 </div>
 
 <script>
@@ -232,7 +232,7 @@
   // Config panel toggle (press 'E')
   document.addEventListener('keydown', function(e) {
     if (e.key === 'e' || e.key === 'E') {
-      document.getElementById('bb-config').classList.toggle('show');
+      document.getElementById('bb-config').classList.add('show');
     }
   });
 

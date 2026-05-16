@@ -132,7 +132,7 @@
   <label>Position / Rolle</label>
   <input id="cfg-role" value="Mittelfeldspieler" />
   <button onclick="applyConfig()">Anwenden</button>
-  <button class="secondary" onclick="replayAnimation()">▶ Replay</button>
+  <button class="secondary" onclick="replayAnimation()">▶ Replay</button> <button class="secondary" onclick="document.getElementById('ri-config').classList.remove('show')">✕ Close</button>
 </div>
 
 <script>
@@ -181,7 +181,7 @@
 
   document.addEventListener('keydown', function(e) {
     if (e.key === 'e' || e.key === 'E') {
-      document.getElementById('ri-config').classList.toggle('show');
+      document.getElementById('ri-config').classList.add('show');
     }
   });
 

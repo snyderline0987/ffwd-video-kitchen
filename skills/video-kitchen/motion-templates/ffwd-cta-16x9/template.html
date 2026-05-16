@@ -149,7 +149,7 @@
   <label>URL / Subtext</label>
   <input id="cfg-subtext" value="youtube.com/@ffwd-media" />
   <button onclick="applyConfig()">Apply</button>
-  <button class="secondary" onclick="replayAnimation()">▶ Replay</button>
+  <button class="secondary" onclick="replayAnimation()">▶ Replay</button> <button class="secondary" onclick="document.getElementById('config-panel').classList.remove('show')">✕ Close</button>
 </div>
 
 <script>
@@ -224,7 +224,7 @@
   // Config panel toggle
   document.addEventListener('keydown', function(e) {
     if (e.key === 'e' || e.key === 'E') {
-      document.getElementById('config-panel').classList.toggle('show');
+      document.getElementById('config-panel').classList.add('show');
     }
   });
 
