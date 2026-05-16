@@ -309,12 +309,34 @@
             const recipes = await fetchRecipes();
             const grid = document.getElementById('recipe-grid');
             grid.innerHTML = '';
+            // Fetch reference renders to cross-link
+            let refRenders = [];
+            try {
+                const refRes = await fetch('/api/reference-renders');
+                if (refRes.ok) refRenders = await refRes.json();
+            } catch(e) {}
+
             recipes.forEach((r) => {
                 const compSrc = r.id + '/composition.html';
                 const compFrame = r.has_composition ? `
                     <div class="w-full bg-[#000] border border-gray-700 rounded overflow-hidden relative mb-4" style="aspect-ratio: ${r.aspect_ratio === '9:16' ? '9/16' : '16/9'}; max-height: 200px;">
                         <iframe src="${compSrc}" class="absolute top-0 left-0 w-full h-full pointer-events-none"></iframe>
                     </div>` : '';
+
+                // Find matching reference renders for this recipe
+                const matchingRefs = refRenders.filter(ref => ref.recipe === r.id);
+                let refHtml = '';
+                if (matchingRefs.length > 0) {
+                    refHtml = '<div class="mb-4"><div class="text-xs text-gray-500 mb-2 font-bold uppercase tracking-wider">Reference Renders</div>';
+                    matchingRefs.forEach(ref => {
+                        const vid = ref.files && ref.files[0] ? `reference-renders/${ref.id}/${ref.files[0]}` : '';
+                        refHtml += `<div class="bg-[#111] border border-gray-800 rounded overflow-hidden mb-2">`;
+                        if (vid) refHtml += `<video src="${vid}" class="w-full" style="max-height:140px" controls muted playsinline></video>`;
+                        refHtml += `<div class="px-3 py-2 text-xs text-gray-400">${ref.title}${ref.bpm ? ' · ' + ref.bpm + ' BPM' : ''}</div></div>`;
+                    });
+                    refHtml += '</div>';
+                }
+
                 grid.innerHTML += `
                     <div class="card p-6 rounded-lg flex flex-col h-full">
                         <div class="flex justify-between items-start mb-4">
@@ -326,6 +348,7 @@
                         </div>
                         <p class="text-gray-400 mb-4 text-sm flex-1">${r.description}</p>
                         ${compFrame}
+                        ${refHtml}
                         <div class="mb-4 bg-[#111] p-3 rounded text-xs border border-gray-800">
                             <div class="text-gray-500 mb-1"><span class="font-bold text-gray-300">Prompt:</span> ${r.prompt || ''}</div>
                             <div class="text-gray-500 mb-1"><span class="font-bold text-gray-300">Music:</span> ${r.music_pref || ''}</div>
