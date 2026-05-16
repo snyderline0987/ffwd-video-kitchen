@@ -106,13 +106,11 @@ app.get('/api/projects', (req, res) => {
             }
         } catch(e) {}
 
-        // Build studio URL pointing to project composition
-        const tunnelBase = process.env.HF_TUNNEL_URL || null;
+        // Studio URL uses the separate HF studio tunnel
+        const studioTunnel = process.env.HF_STUDIO_URL || null;
         let studioUrl = null;
-        if (tunnelBase) {
-            // HF studio serves at / with project path
-            const relPath = path.relative(workspaceRoot, compDir);
-            studioUrl = tunnelBase.replace(/\/$/, '') + '/studio/' + relPath + '/';
+        if (studioTunnel) {
+            studioUrl = studioTunnel.replace(/\/$/, '') + '/';
         }
 
         projects.push({
@@ -219,10 +217,8 @@ app.post('/api/start-studio', (req, res) => {
     try {
         const running = execSync('lsof -i :3002 -t 2>/dev/null || true').toString().trim();
         if (running) {
-            // Already running — return URL
-            const tunnelBase = process.env.HF_TUNNEL_URL || 'http://localhost:3002';
-            const relPath = path.relative(workspaceRoot, compDir);
-            return res.json({ url: tunnelBase.replace(/\/$/, '') + '/studio/' + relPath + '/', running: true });
+            const studioTunnel = process.env.HF_STUDIO_URL || 'http://localhost:3002';
+            return res.json({ url: studioTunnel.replace(/\/$/, '') + '/', running: true });
         }
     } catch(e) {}
 
@@ -235,9 +231,8 @@ app.post('/api/start-studio', (req, res) => {
     });
     studio.unref();
 
-    const tunnelBase = process.env.HF_TUNNEL_URL || 'http://localhost:3002';
-    const relPath = path.relative(workspaceRoot, compDir);
-    res.json({ url: tunnelBase.replace(/\/$/, '') + '/studio/' + relPath + '/', running: false });
+    const studioTunnel = process.env.HF_STUDIO_URL || 'http://localhost:3002';
+    res.json({ url: studioTunnel.replace(/\/$/, '') + '/', running: false });
 });
 
 app.listen(8080, () => console.log('Listening on port 8080'));
