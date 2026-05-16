@@ -38,8 +38,7 @@
             <button class="tab-btn active" onclick="switchTab('projects', event)">Recent Projects</button>
             <button class="tab-btn" onclick="switchTab('recipes', event)">Recipe Blueprints</button>
             <button class="tab-btn" onclick="switchTab('design', event)">Motion Templates</button>
-            <button class="tab-btn" onclick="switchTab('references', event)">Reference Renders</button>
-            <button class="tab-btn" onclick="switchTab('chat', event)">Agent Chat</button>
+            <button class="tab-btn" onclick="switchTab('howto', event)">How to Cook</button>
         </div>
     </header>
 
@@ -197,19 +196,127 @@
             </div>
         </div>
 
-        <!-- Reference Renders Tab -->
-        <div id="tab-references" class="tab-content">
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="reference-grid">
-                <!-- Loaded via JS -->
-            </div>
-        </div>
+        <!-- How to Cook Tab -->
+        <div id="tab-howto" class="tab-content">
+            <div class="max-w-4xl mx-auto">
+                <!-- Hero -->
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-white mb-3">How to Cook a Video</h2>
+                    <p class="text-gray-400 text-lg max-w-2xl mx-auto">Video Kitchen is an agent-driven pipeline. You bring the ingredients — a source video and a recipe — and your AI agent handles the rest.</p>
+                </div>
 
-<!-- Chat Tab -->
-        <div id="tab-chat" class="tab-content">
-            <div class="w-full h-full border border-gray-800 rounded-lg bg-[#111] min-h-[70vh] flex flex-col items-center justify-center text-center">
-                <div class="text-6xl mb-4">🤖</div>
-                <h2 class="text-2xl font-bold text-white mb-2">Agent Chat</h2>
-                <p class="text-gray-400">Coming soon!</p>
+                <!-- Workflow Steps -->
+                <div class="space-y-0 relative">
+                    <!-- Vertical connector line -->
+                    <div class="absolute left-6 top-8 bottom-8 w-px bg-gray-800 z-0"></div>
+
+                    <!-- Step 1 -->
+                    <div class="flex gap-6 items-start relative z-10 pb-10">
+                        <div class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white font-bold text-lg shrink-0">1</div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">Drop a Video</h3>
+                            <p class="text-gray-400 mb-3">Send your source footage to the agent — any format, any length. Drag a file into chat, paste a URL, or point to an existing file on disk.</p>
+                            <div class="bg-[#111] border border-gray-800 rounded-lg p-4 font-mono text-sm text-gray-300">
+                                <span class="text-gray-500"># via Telegram / Discord / CLI</span><br>
+                                <span class="text-red-400">"make a 30s teaser from this video"</span> + 📎 <span class="text-gray-500">source.mp4</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flex gap-6 items-start relative z-10 pb-10">
+                        <div class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white font-bold text-lg shrink-0">2</div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">Pick a Recipe</h3>
+                            <p class="text-gray-400 mb-3">Choose a recipe blueprint that matches your format. Each recipe defines the structure, pacing, aspect ratio, and editing theory for the final video.</p>
+                            <div class="grid grid-cols-2 gap-3 mt-3">
+                                <div class="bg-[#111] border border-gray-800 rounded-lg p-3">
+                                    <div class="text-white font-semibold text-sm">📰 News Overview 30s</div>
+                                    <div class="text-gray-500 text-xs mt-1">16:9 · Hook → Context → Facts → CTA</div>
+                                </div>
+                                <div class="bg-[#111] border border-gray-800 rounded-lg p-3">
+                                    <div class="text-white font-semibold text-sm">📱 Social Clip 9:16</div>
+                                    <div class="text-gray-500 text-xs mt-1">9:16 · Hook → Punchline → CTA</div>
+                                </div>
+                                <div class="bg-[#111] border border-gray-800 rounded-lg p-3">
+                                    <div class="text-white font-semibold text-sm">🎬 On Air Promo</div>
+                                    <div class="text-gray-500 text-xs mt-1">16:9 · Cinematic longform</div>
+                                </div>
+                                <div class="bg-[#111] border border-gray-800 rounded-lg p-3">
+                                    <div class="text-white font-semibold text-sm">🧠 Gen AI Remake</div>
+                                    <div class="text-gray-500 text-xs mt-1">16:9 · Before → AI → Reveal</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flex gap-6 items-start relative z-10 pb-10">
+                        <div class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white font-bold text-lg shrink-0">3</div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">Agent Analyzes</h3>
+                            <p class="text-gray-400 mb-3">The agent automatically extracts thumbnails, rates each shot for teaser value, transcribes audio, and identifies the best moments — hero shots, emotional beats, key facts.</p>
+                            <div class="bg-[#111] border border-gray-800 rounded-lg p-4 space-y-2 text-sm">
+                                <div class="flex justify-between"><span class="text-gray-500">Extracting thumbnails</span><span class="text-green-400">✓ 27 frames @ 5s interval</span></div>
+                                <div class="flex justify-between"><span class="text-gray-500">Vision rating</span><span class="text-green-400">✓ 8 hero · 8 strong · 11 skip</span></div>
+                                <div class="flex justify-between"><span class="text-gray-500">Transcription</span><span class="text-green-400">✓ 1,381 chars German</span></div>
+                                <div class="flex justify-between"><span class="text-gray-500">Shot selection</span><span class="text-green-400">✓ 6 clips picked</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="flex gap-6 items-start relative z-10 pb-10">
+                        <div class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white font-bold text-lg shrink-0">4</div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">Composition Built</h3>
+                            <p class="text-gray-400 mb-3">The agent writes a HyperFrames HTML composition — video clips, text overlays, GSAP animations, all timed to the frame. Film theory (Murch, Eisenstein, Dmytryk) drives the cut decisions.</p>
+                            <div class="bg-[#111] border border-gray-800 rounded-lg p-4 font-mono text-xs text-gray-400 leading-relaxed">
+                                <span class="text-gray-600">&lt;</span><span class="text-red-400">div</span> <span class="text-yellow-400">data-composition-id</span>=<span class="text-green-400">"main"</span><span class="text-gray-600">&gt;</span><br>
+                                &nbsp;&nbsp;<span class="text-gray-600">&lt;</span><span class="text-red-400">video</span> <span class="text-yellow-400">src</span>=<span class="text-green-400">"clip-hook.mp4"</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-yellow-400">data-start</span>=<span class="text-green-400">"0"</span> <span class="text-yellow-400">data-duration</span>=<span class="text-green-400">"4"</span> <span class="text-gray-600">/&gt;</span><br>
+                                &nbsp;&nbsp;<span class="text-gray-600">&lt;</span><span class="text-red-400">div</span> <span class="text-yellow-400">class</span>=<span class="text-green-400">"headline"</span><span class="text-gray-600">&gt;</span><span class="text-white">Breaking Story</span><span class="text-gray-600">&lt;/</span><span class="text-red-400">div</span><span class="text-gray-600">&gt;</span><br>
+                                &nbsp;&nbsp;<span class="text-gray-600">&lt;</span><span class="text-red-400">script</span><span class="text-gray-600">&gt;</span> <span class="text-blue-400">gsap.timeline()</span>... <span class="text-gray-600">&lt;/</span><span class="text-red-400">script</span><span class="text-gray-600">&gt;</span><br>
+                                <span class="text-gray-600">&lt;/</span><span class="text-red-400">div</span><span class="text-gray-600">&gt;</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="flex gap-6 items-start relative z-10 pb-10">
+                        <div class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white font-bold text-lg shrink-0">5</div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">Render &amp; Serve</h3>
+                            <p class="text-gray-400 mb-3">HyperFrames renders the composition frame-by-frame via headless Chromium, encodes to MP4, and the agent delivers the finished video back to you.</p>
+                            <div class="bg-[#111] border border-gray-800 rounded-lg p-4 font-mono text-sm text-gray-300">
+                                <span class="text-gray-500">$</span> hyperframes render --output teaser.mp4 --fps 24<br>
+                                <span class="text-gray-500">720 frames · 1080x1920 · 30.0s</span><br>
+                                <span class="text-green-400">✓ Render complete — 10.7 MB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="flex gap-6 items-start relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white font-bold text-lg shrink-0">6</div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">Iterate</h3>
+                            <p class="text-gray-400 mb-3">Not perfect? Tell the agent what to change. Adjust timing, swap clips, rewrite text, change colors, tweak animations. The composition is code — every detail is editable by conversation.</p>
+                            <div class="bg-[#111] border border-gray-800 rounded-lg p-4 space-y-2 text-sm">
+                                <div><span class="text-gray-500">You:</span> <span class="text-white">"swap the 3rd clip for something more energetic"</span></div>
+                                <div><span class="text-gray-500">Agent:</span> <span class="text-green-400">Replaced clip with ⭐5 crowd shot. Re-rendering...</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom CTA -->
+                <div class="mt-12 text-center border-t border-gray-800 pt-8">
+                    <p class="text-gray-500 text-sm mb-4">The entire pipeline runs locally. No cloud APIs, no uploads. Your footage stays on your machine.</p>
+                    <div class="inline-flex items-center gap-3 text-gray-400 text-sm font-mono bg-[#111] border border-gray-800 rounded-lg px-6 py-3">
+                        <span class="text-green-400">$</span> openclaw start
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -478,50 +585,9 @@
             loadRecipes();
         }
 
-        async function loadReferenceRenders() {
-            const grid = document.getElementById('reference-grid');
-            grid.innerHTML = '';
-            try {
-                const res = await fetch('/api/reference-renders');
-                if (!res.ok) return;
-                const refs = await res.json();
-                if (refs.length === 0) {
-                    grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">No reference renders yet. Run a recipe and save the result here.</div>';
-                    return;
-                }
-                refs.forEach(r => {
-                    const videoFile = r.files && r.files.length > 0 ? r.files[0] : null;
-                    const videoHtml = videoFile ? `<video src="reference-renders/${r.id}/${videoFile}" class="w-full rounded border border-gray-700" style="max-height:180px" controls muted playsinline></video>` : '';
-                    const compLink = r.hasComp ? `<a href="reference-renders/${r.id}/composition.html" target="_blank" class="text-xs text-gray-400 hover:text-red-400 underline">View Composition</a>` : '';
-                    grid.innerHTML += `
-                        <div class="card p-6 rounded-lg flex flex-col h-full">
-                            <div class="flex justify-between items-start mb-3">
-                                <h2 class="text-lg font-bold leading-tight">${r.title || r.id}</h2>
-                                <div class="flex gap-1">
-                                    ${r.bpm ? `<span class="badge">${r.bpm} BPM</span>` : ''}
-                                    <span class="badge">${r.duration || ''}</span>
-                                </div>
-                            </div>
-                            <p class="text-gray-400 text-sm mb-4 flex-1">${r.description || ''}</p>
-                            ${videoHtml}
-                            <div class="mt-4 bg-[#111] p-3 rounded text-xs border border-gray-800 space-y-1">
-                                ${r.recipe ? `<div class="text-gray-500"><span class="font-bold text-gray-300">Recipe:</span> ${r.recipe}</div>` : ''}
-                                ${r.theory ? `<div class="text-gray-500"><span class="font-bold text-gray-300">Theory:</span> <span class="theory-badge px-1 rounded text-red-400">${r.theory}</span></div>` : ''}
-                                ${r.music ? `<div class="text-gray-500"><span class="font-bold text-gray-300">Music:</span> ${r.music}</div>` : ''}
-                                ${r.source ? `<div class="text-gray-500"><span class="font-bold text-gray-300">Source:</span> ${r.source}</div>` : ''}
-                                ${compLink}
-                            </div>
-                        </div>`;
-                });
-            } catch(e) { /* ignore */ }
-        }
-
         // Init
         loadProjects();
         loadRecipes();
-        loadReferenceRenders();
-        loadReferenceRenders();
-        // Also load templates into Motion Templates tab
         loadTemplates();
 
         async function loadTemplates() {

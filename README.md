@@ -52,18 +52,78 @@ skills:
 | `film-editing-theory` | Cut decisions based on Murch, Dmytryk, Eisenstein, Menke |
 | `open-design` | CI elements, motion templates, brand assets |
 
-## Recipes
+## How to Cook a Video 🍳
 
-Each recipe is a folder with `config.json` + `composition.html`:
+Video Kitchen is an agent-driven pipeline. You bring the ingredients — a source video and a recipe — and your AI agent handles the rest.
+
+### 1. Drop a Video
+
+Send your source footage to the agent — any format, any length. Drag a file into chat, paste a URL, or point to an existing file on disk.
+
+```
+# via Telegram / Discord / CLI
+"make a 30s teaser from this video" + 📎 source.mp4
+```
+
+### 2. Pick a Recipe
+
+Choose a recipe blueprint that matches your format. Each recipe defines the structure, pacing, aspect ratio, and editing theory for the final video.
 
 | Recipe | Ratio | Duration | Theory | Style |
 |--------|-------|----------|--------|-------|
-| News Overview 30s | 16:9 | 30s | Dmytryk | Clean hard cuts, editorial |
-| On Air Promo | 16:9 | 40s | Menke | Cinematic, rhythmic |
-| Social Clip | 9:16 | 15-25s | Eisenstein | Fast metric montage |
-| Gen AI Remake | 16:9 | 30s | Eisenstein | Before/after, glitch effects |
-| Meme Culture React | 9:16 | 15s | Eisenstein | Zoom, bold text, punchline |
-| Product Landing | 16:9 | 20s | Dmytryk | Clean, modern, sales |
+| 📰 News Overview 30s | 16:9 | 30s | Dmytryk | Hook → Context → Facts → CTA |
+| 📱 Social Clip | 9:16 | 15-25s | Eisenstein | Hook → Punchline → CTA |
+| 🎬 On Air Promo | 16:9 | 40s | Menke | Cinematic, rhythmic |
+| 🧠 Gen AI Remake | 16:9 | 30s | Eisenstein | Before → AI → Reveal |
+| 😂 Meme Culture React | 9:16 | 15s | Eisenstein | Zoom, bold text, punchline |
+| 🛍️ Product Landing | 16:9 | 20s | Dmytryk | Clean, modern, sales |
+
+### 3. Agent Analyzes
+
+The agent automatically extracts thumbnails, rates each shot for teaser value, transcribes audio, and identifies the best moments — hero shots, emotional beats, key facts.
+
+```
+Extracting thumbnails   ✓ 27 frames @ 5s interval
+Vision rating           ✓ 8 hero · 8 strong · 11 skip
+Transcription           ✓ 1,381 chars German
+Shot selection          ✓ 6 clips picked
+```
+
+### 4. Composition Built
+
+The agent writes a HyperFrames HTML composition — video clips, text overlays, GSAP animations, all timed to the frame. Film theory (Murch, Eisenstein, Dmytryk) drives the cut decisions.
+
+```html
+<div data-composition-id="main">
+  <video src="clip-hook.mp4"
+         data-start="0" data-duration="4" />
+  <div class="headline">Breaking Story</div>
+  <script> gsap.timeline()... </script>
+</div>
+```
+
+### 5. Render & Serve
+
+HyperFrames renders the composition frame-by-frame via headless Chromium, encodes to MP4, and the agent delivers the finished video back to you.
+
+```
+$ hyperframes render --output teaser.mp4 --fps 24
+720 frames · 1080x1920 · 30.0s
+✓ Render complete — 10.7 MB
+```
+
+### 6. Iterate
+
+Not perfect? Tell the agent what to change. Adjust timing, swap clips, rewrite text, change colors, tweak animations. The composition is code — every detail is editable by conversation.
+
+```
+You:   "swap the 3rd clip for something more energetic"
+Agent: Replaced clip with ⭐5 crowd shot. Re-rendering...
+```
+
+> The entire pipeline runs locally. No cloud APIs, no uploads. Your footage stays on your machine.
+
+---
 
 ## Dashboard
 

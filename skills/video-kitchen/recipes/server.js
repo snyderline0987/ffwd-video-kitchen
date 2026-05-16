@@ -67,11 +67,18 @@ app.get('/api/projects', (req, res) => {
     allDirs.forEach(dir => {
         if (skipDirs.some(s => dir === s || dir.startsWith('.'))) return;
 
-        // Check for hyperframes.json at project root or my-video subfolder
+        // Check for hyperframes.json at project root or studio subfolder
         let hfPath = path.join(workspaceRoot, dir, 'hyperframes.json');
         let projectLabel = dir;
+        let compDir = path.join(workspaceRoot, dir);
         if (!fs.existsSync(hfPath)) {
+            hfPath = path.join(workspaceRoot, dir, 'studio', 'my-video', 'hyperframes.json');
+            compDir = path.join(workspaceRoot, dir, 'studio', 'my-video');
+        }
+        if (!fs.existsSync(hfPath)) {
+            // Also check my-video direct subfolder
             hfPath = path.join(workspaceRoot, dir, 'my-video', 'hyperframes.json');
+            compDir = path.join(workspaceRoot, dir, 'my-video');
         }
         if (!fs.existsSync(hfPath)) return;
 
@@ -87,7 +94,7 @@ app.get('/api/projects', (req, res) => {
         if (meta && meta.title) projectLabel = meta.title;
 
         // Check for rendered videos
-        const rendersDir = path.join(workspaceRoot, dir, 'renders');
+        const rendersDir = path.join(compDir, 'renders');
         let renderCount = 0;
         let lastRender = null;
         try {
@@ -105,7 +112,8 @@ app.get('/api/projects', (req, res) => {
             compositions: comps,
             renderCount,
             lastRender,
-            meta: meta || {}
+            meta: meta || {},
+            cloudUrl: process.env.HF_TUNNEL_URL || null
         });
     });
 
