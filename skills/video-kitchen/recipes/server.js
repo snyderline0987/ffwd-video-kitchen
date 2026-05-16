@@ -106,6 +106,15 @@ app.get('/api/projects', (req, res) => {
             }
         } catch(e) {}
 
+        // Build studio URL pointing to project composition
+        const tunnelBase = process.env.HF_TUNNEL_URL || null;
+        let studioUrl = null;
+        if (tunnelBase) {
+            // HF studio serves at / with project path
+            const relPath = path.relative(workspaceRoot, compDir);
+            studioUrl = tunnelBase.replace(/\/$/, '') + '/studio/' + relPath + '/';
+        }
+
         projects.push({
             id: dir,
             label: projectLabel,
@@ -113,7 +122,8 @@ app.get('/api/projects', (req, res) => {
             renderCount,
             lastRender,
             meta: meta || {},
-            cloudUrl: process.env.HF_TUNNEL_URL || null
+            cloudUrl: studioUrl,
+            localPath: compDir
         });
     });
 
@@ -187,5 +197,47 @@ app.get('/api/motion-templates', (req, res) => {
 
 // Serve motion template files
 app.use('/motion-templates', express.static(motionTemplatesDir));
+
+app.post('/api/start-studio', (req, res) => {
+    const { projectId } = req.body;
+    if (!projectId) return res.status(400).json({ error: 'projectId required' });
+
+    // Find project dir
+    let compDir = null;
+    const checks = [
+        path.join(workspaceRoot, projectId),
+        path.join(workspaceRoot, projectId, 'studio', 'my-video'),
+        path.join(workspaceRoot, projectId, 'my-video')
+    ];
+    for (const d of checks) {
+        if (fs.existsSync(path.join(d, 'hyperframes.json'))) { compDir = d; break; }
+    }
+    if (!compDir) return res.status(404).json({ error: 'Project not found' });
+
+    // Check if studio already running
+    const { execSync } = require('child_process');
+    try {
+        const running = execSync('lsof -i :3002 -t 2>/dev/null || true').toString().trim();
+        if (running) {
+            // Already running — return URL
+            const tunnelBase = process.env.HF_TUNNEL_URL || 'http://localhost:3002';
+            const relPath = path.relative(workspaceRoot, compDir);
+            return res.json({ url: tunnelBase.replace(/\/$/, '') + '/studio/' + relPath + '/', running: true });
+        }
+    } catch(e) {}
+
+    // Start studio in background
+    const { spawn } = require('child_process');
+    const studio = spawn('npx', ['hyperframes', 'preview', '--port', '3002'], {
+        cwd: compDir,
+        detached: true,
+        stdio: 'ignore'
+    });
+    studio.unref();
+
+    const tunnelBase = process.env.HF_TUNNEL_URL || 'http://localhost:3002';
+    const relPath = path.relative(workspaceRoot, compDir);
+    res.json({ url: tunnelBase.replace(/\/$/, '') + '/studio/' + relPath + '/', running: false });
+});
 
 app.listen(8080, () => console.log('Listening on port 8080'));

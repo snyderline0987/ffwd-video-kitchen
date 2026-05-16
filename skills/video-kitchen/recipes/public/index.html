@@ -274,6 +274,32 @@
         }
 
         // Projects Logic
+
+        async function startStudio(projectId) {
+            const btn = event.target.closest('button');
+            btn.innerHTML = 'Starting...';
+            btn.disabled = true;
+            try {
+                const res = await fetch('/api/start-studio', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ projectId })
+                });
+                const data = await res.json();
+                if (data.url) {
+                    btn.innerHTML = 'Opening...';
+                    window.open(data.url, '_blank');
+                    setTimeout(() => loadProjects(), 2000); // refresh to show cloud link
+                } else {
+                    btn.innerHTML = data.error || 'Failed';
+                    setTimeout(() => { btn.innerHTML = 'Start Studio <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>'; btn.disabled = false; }, 3000);
+                }
+            } catch(e) {
+                btn.innerHTML = 'Error';
+                setTimeout(() => { btn.innerHTML = 'Start Studio <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>'; btn.disabled = false; }, 3000);
+            }
+        }
+
         async function loadProjects() {
             let projects = [];
             try {
@@ -289,7 +315,7 @@
                         badgeHtml += `<span class="bg-gray-800 text-xs px-2 py-1 rounded border border-gray-700">${c}</span>`;
                     });
                     
-                    let linkHtml = p.cloudUrl ? `<a href="${p.cloudUrl}" target="_blank" class="text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm font-bold w-full text-center mt-auto flex justify-center items-center gap-2 transition">Open Cloud Studio <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></a>` : '';
+                    let linkHtml = p.cloudUrl ? `<a href="${p.cloudUrl}" target="_blank" class="text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm font-bold w-full text-center mt-auto flex justify-center items-center gap-2 transition">Open Cloud Studio <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></a>` : `<button onclick="startStudio('${p.id}')" class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-sm font-bold w-full text-center mt-auto flex justify-center items-center gap-2 transition cursor-pointer">Start Studio <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button>`;
 
                     container.innerHTML += `
                         <div class="card p-6 rounded-lg flex flex-col min-h-[160px]">
