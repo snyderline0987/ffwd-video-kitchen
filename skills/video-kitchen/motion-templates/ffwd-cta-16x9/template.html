@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>FFWD CTA</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0a;
+    overflow: hidden;
+    width: 1920px; height: 1080px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .canvas {
+    position: relative;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Triangle group */
+  .triangles {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 40px;
+  }
+
+  .tri {
+    width: 0; height: 0;
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-left: 80px solid #e50914;
+    opacity: 0;
+    transform: scale(0);
+    filter: drop-shadow(0 0 20px rgba(229, 9, 20, 0.4));
+  }
+
+  /* Glow pulse behind triangles */
+  .glow {
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(229,9,20,0.15) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -60%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Text */
+  .cta-text {
+    text-align: center;
+    opacity: 0;
+  }
+
+  .cta-headline {
+    color: #ffffff;
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .cta-subtext {
+    color: #e50914;
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  /* Thin red line separator */
+  .separator {
+    width: 0;
+    height: 2px;
+    background: #e50914;
+    margin-bottom: 32px;
+    opacity: 0;
+  }
+
+  /* Config panel */
+  .config {
+    position: fixed; top: 20px; right: 20px;
+    background: rgba(0,0,0,0.92); border: 1px solid #333;
+    border-radius: 12px; padding: 24px;
+    pointer-events: all; display: none;
+    color: #fff; font-size: 14px;
+    backdrop-filter: blur(12px); z-index: 100;
+    font-family: 'Inter', sans-serif;
+  }
+  .config.show { display: block; }
+  .config h3 { margin-bottom: 16px; font-size: 16px; font-weight: 700; }
+  .config label { display: block; margin-bottom: 4px; color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .config input {
+    background: #1a1a1a; border: 1px solid #333; color: #fff;
+    padding: 8px 12px; border-radius: 6px; width: 320px; margin-bottom: 14px;
+    font-family: 'Inter', sans-serif; font-size: 14px;
+  }
+  .config input:focus { outline: none; border-color: #e50914; }
+  .config button {
+    background: #e50914; color: #fff; border: none; padding: 10px 24px;
+    border-radius: 6px; cursor: pointer; font-weight: 700; margin-right: 8px;
+  }
+  .config button.secondary { background: #333; }
+
+  .loop-badge {
+    position: fixed; bottom: 16px; left: 16px;
+    background: rgba(0,0,0,0.7); color: #fff;
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; font-family: 'Inter', sans-serif;
+    pointer-events: none; z-index: 50;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="canvas">
+  <div class="glow" id="glow"></div>
+
+  <div class="triangles">
+    <div class="tri" id="tri1"></div>
+    <div class="tri" id="tri2"></div>
+    <div class="tri" id="tri3"></div>
+  </div>
+
+  <div class="separator" id="separator"></div>
+
+  <div class="cta-text" id="cta-text">
+    <div class="cta-headline" id="cta-headline">Abonniere uns auf</div>
+    <div class="cta-subtext" id="cta-subtext">youtube.com/@ffwd-media</div>
+  </div>
+</div>
+
+<div class="loop-badge">↻ LOOP</div>
+
+<div class="config" id="config-panel">
+  <h3>▶▶▶ FFWD CTA</h3>
+  <label>Headline</label>
+  <input id="cfg-headline" value="Abonniere uns auf" />
+  <label>URL / Subtext</label>
+  <input id="cfg-subtext" value="youtube.com/@ffwd-media" />
+  <button onclick="applyConfig()">Apply</button>
+  <button class="secondary" onclick="replayAnimation()">▶ Replay</button>
+</div>
+
+<script>
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('headline')) {
+    document.getElementById('cta-headline').textContent = params.get('headline');
+    document.getElementById('cfg-headline').value = params.get('headline');
+  }
+  if (params.get('subtext')) {
+    document.getElementById('cta-subtext').textContent = params.get('subtext');
+    document.getElementById('cfg-subtext').value = params.get('subtext');
+  }
+
+  var tl;
+
+  function buildTimeline() {
+    if (tl) { tl.kill(); }
+
+    // Reset
+    gsap.set('.tri', { opacity: 0, scale: 0 });
+    gsap.set('#glow', { opacity: 0, scale: 0.5 });
+    gsap.set('#separator', { opacity: 0, width: 0 });
+    gsap.set('#cta-text', { opacity: 0, y: 30 });
+
+    tl = gsap.timeline({ paused: true, repeat: -1, repeatDelay: 2 });
+
+    // Glow fades in
+    tl.to('#glow', { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' }, 0)
+
+    // Triangle 1 pops in with overshoot
+    tl.to('#tri1', { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(2.5)' }, 0.2)
+
+    // Triangle 2
+    tl.to('#tri2', { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(2.5)' }, 0.4)
+
+    // Triangle 3
+    tl.to('#tri3', { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(2.5)' }, 0.6)
+
+    // Subtle pulse on all triangles together
+    tl.to('.tri', { scale: 1.08, duration: 0.3, ease: 'power2.out' }, 1.0)
+    tl.to('.tri', { scale: 1.0, duration: 0.3, ease: 'power2.inOut' }, 1.3)
+
+    // Red line expands from center
+    tl.to('#separator', { opacity: 1, width: 120, duration: 0.4, ease: 'power3.out' }, 1.1)
+
+    // Text fades up
+    tl.to('#cta-text', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 1.3)
+
+    // Hold for a beat
+
+    // Exit: everything fades out
+    tl.to('#cta-text', { opacity: 0, y: -20, duration: 0.3, ease: 'power2.in' }, 4.2)
+    tl.to('#separator', { opacity: 0, width: 0, duration: 0.2, ease: 'power2.in' }, 4.3)
+    tl.to('.tri', { opacity: 0, scale: 0.5, duration: 0.3, ease: 'back.in(2)' }, 4.4)
+    tl.to('#glow', { opacity: 0, scale: 0.5, duration: 0.3, ease: 'power2.in' }, 4.4)
+
+    window.__timelines = [tl];
+    window.__duration = 5;
+    return tl;
+  }
+
+  buildTimeline();
+  tl.play();
+
+  // hf-seek for HyperFrames rendering
+  window.addEventListener('hf-seek', function(e) {
+    var t = (e && e.detail && e.detail.time != null) ? e.detail.time : 0;
+    if (tl) { tl.time(t); tl.pause(); }
+  });
+
+  // Config panel toggle
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'e' || e.key === 'E') {
+      document.getElementById('config-panel').classList.toggle('show');
+    }
+  });
+
+  window.applyConfig = function() {
+    document.getElementById('cta-headline').textContent = document.getElementById('cfg-headline').value;
+    document.getElementById('cta-subtext').textContent = document.getElementById('cfg-subtext').value;
+  };
+
+  window.replayAnimation = function() {
+    buildTimeline();
+    tl.play();
+  };
+})();
+</script>
+</body>
+</html>

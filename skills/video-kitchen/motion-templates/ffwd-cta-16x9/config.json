@@ -1,0 +1,16 @@
+{
+  "id": "ffwd-cta-16x9",
+  "title": "FFWD Call to Action 16:9",
+  "description": "End card CTA with 3 animated fast-forward triangles and configurable text. FFWD brand CI.",
+  "aspect_ratio": "16:9",
+  "resolution": "1920x1080",
+  "duration": "5s",
+  "params": ["headline", "subtext"],
+  "defaults": {
+    "headline": "Abonniere uns auf",
+    "subtext": "youtube.com/@ffwd-media"
+  },
+  "fonts": ["Inter"],
+  "hasFillVideo": false,
+  "tags": ["cta", "end-card", "ffwd", "subscribe"]
+}
