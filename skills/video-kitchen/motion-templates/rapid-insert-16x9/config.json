@@ -1,0 +1,10 @@
+{
+  "id": "rapid-insert-16x9",
+  "title": "Rapid Insert 16:9",
+  "description": "FCPX-style name insert for 16:9 compositions. Green bar with Wiener Melange text overlay on fill video.",
+  "aspect_ratio": "16:9",
+  "resolution": "1920x1080",
+  "duration": "5s",
+  "params": ["name", "role"],
+  "tags": ["name-insert", "landscape", "rapid", "wiener-melange"]
+}
