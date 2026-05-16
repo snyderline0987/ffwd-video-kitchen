@@ -1,0 +1,10 @@
+{
+  "id": "composition-opener",
+  "title": "Show Opener",
+  "description": "Full-screen animated opener with logo reveal and title animation. GSAP-powered.",
+  "aspect_ratio": "16:9",
+  "resolution": "1920x1080",
+  "duration": "8s",
+  "params": ["title", "subtitle"],
+  "tags": ["opener", "show-open", "logo-reveal"]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "bauchbinde",
+  "title": "Bauchbinde",
+  "description": "Classic FFWD lower third name insert. Wiener Melange font, green bar with white text.",
+  "aspect_ratio": "16:9",
+  "resolution": "1920x1080",
+  "duration": "5s",
+  "params": ["name", "role"],
+  "tags": ["lower-third", "name-insert", "ffwd"]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "composition-rapid-teaser",
+  "title": "Rapid Teaser",
+  "description": "Quick teaser format with bold text reveal and fast-paced animation.",
+  "aspect_ratio": "16:9",
+  "resolution": "1920x1080",
+  "duration": "10s",
+  "params": ["headline", "subtext"],
+  "tags": ["teaser", "rapid", "bold-text"]
+}

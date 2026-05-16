@@ -1,0 +1,12 @@
+{
+  "id": "stadt-wien-insert",
+  "title": "Stadt Wien Insert",
+  "description": "9:16 name insert in Stadt Wien CI. Configurable color from official palette. Wiener Melange font.",
+  "aspect_ratio": "9:16",
+  "resolution": "1080x1920",
+  "duration": "5s",
+  "params": ["name", "role", "color"],
+  "defaults": {"color": "#FF5A64"},
+  "palette": ["#FF5A64", "#AAAAFA", "#462346", "#82D282", "#E6C828", "#D6D1CA"],
+  "tags": ["name-insert", "vertical", "stadt-wien", "ci", "wiener-melange"]
+}

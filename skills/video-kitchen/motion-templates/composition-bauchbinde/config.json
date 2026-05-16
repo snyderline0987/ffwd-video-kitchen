@@ -1,0 +1,11 @@
+{
+  "id": "composition-bauchbinde",
+  "title": "9:16 Bauchbinde",
+  "description": "Vertical 9:16 Bauchbinde with Wiener Melange font, configurable name/role/color.",
+  "aspect_ratio": "9:16",
+  "resolution": "1080x1920",
+  "duration": "5s",
+  "params": ["name", "role", "color"],
+  "defaults": {"color": "#4CAF50"},
+  "tags": ["lower-third", "name-insert", "vertical", "wiener-melange"]
+}

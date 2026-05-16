@@ -1,0 +1,10 @@
+{
+  "id": "preview-overlay",
+  "title": "Overlay Preview",
+  "description": "Animated overlay with GSAP-driven motion. Transparent background for compositing.",
+  "aspect_ratio": "16:9",
+  "resolution": "1920x1080",
+  "duration": "5s",
+  "params": [],
+  "tags": ["overlay", "preview"]
+}

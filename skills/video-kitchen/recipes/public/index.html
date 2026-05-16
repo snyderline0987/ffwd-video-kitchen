@@ -61,138 +61,10 @@
         <!-- Design Elements Tab -->
         <div id="tab-design" class="tab-content">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-white border-b border-gray-800 pb-2 w-full flex justify-between">
-                    Open Design Library
-                    <button class="px-4 py-2 bg-gray-700 text-gray-400 text-sm font-bold rounded cursor-not-allowed">Sync Figma / Open Design</button>
-                </h2>
+                <h2 class="text-2xl font-bold text-white border-b border-gray-800 pb-2 w-full">Motion Templates</h2>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                <!-- Opener Preview Card -->
-                <div class="card p-6 rounded-lg flex flex-col h-full bg-[#111] border-gray-800">
-                    <div class="flex justify-between items-start mb-4">
-                        <h2 class="text-xl font-bold text-white">W24 On Air Opener | GLEICH | classic</h2>
-                        <span class="bg-blue-900 text-blue-300 px-2 py-1 rounded text-xs uppercase font-bold">Standard CI</span>
-                    </div>
-                    <p class="text-gray-400 mb-4 text-sm">Transparent animated WebM overlay for the standard FFWD opener sequence.</p>
-                    
-                    <div class="w-full bg-[#000] border border-gray-700 rounded overflow-hidden relative mb-4 iframe-wrapper" style="aspect-ratio: 16/9;">
-                        <iframe src="preview-opener.html" class="absolute top-0 left-0 w-[1920px] h-[1080px] pointer-events-none origin-top-left scaled-iframe"></iframe>
-                    </div>
-                    
-                    <div class="mt-auto flex gap-2">
-                        <button class="w-1/2 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-xs">Copy HTML Tag</button>
-                        <button class="w-1/2 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-xs">Edit Mapping</button>
-                    </div>
-                </div>
-
-                <!-- Preview Card -->
-                <div class="card p-6 rounded-lg flex flex-col h-full bg-[#111] border-gray-800">
-                    <div class="flex justify-between items-start mb-4">
-                        <h2 class="text-xl font-bold text-white">FFWD Lower Third</h2>
-                        <span class="bg-blue-900 text-blue-300 px-2 py-1 rounded text-xs uppercase font-bold">Auto-Synced</span>
-                    </div>
-                    <p class="text-gray-400 mb-4 text-sm">Compiled from Figma (mock-octopus.json). Ready for composition rendering.</p>
-                    
-                    <div class="w-full bg-[#000] border border-gray-700 rounded overflow-hidden relative mb-4 iframe-wrapper"  style="aspect-ratio: 16/9;">
-                        <iframe src="preview-overlay.html" class="absolute top-0 left-0 w-[1920px] h-[1080px] pointer-events-none origin-top-left scaled-iframe" ></iframe>
-                    </div>
-                    <script>
-                        // Dynamically scale the iframe based on the container width
-                        function resizeIframe() {
-                            const wrappers = document.querySelectorAll('.iframe-wrapper');
-                            const iframes = document.querySelectorAll('.scaled-iframe');
-                            wrappers.forEach((wrapper, i) => {
-                                const iframe = iframes[i];
-                                if(wrapper && iframe) {
-                                    const iW = parseInt(iframe.style.width) || parseInt(iframe.getAttribute('width')) || (iframe.classList.contains('vertical') ? 1080 : 1920);
-                                    const scale = wrapper.clientWidth / iW;
-                                    iframe.style.transform = `scale(${scale})`;
-                                }
-                            });
-                        }
-                        window.addEventListener('resize', resizeIframe);
-                        // Initial sizing
-                        setTimeout(resizeIframe, 100);
-                        // Also hook into tab switch
-                        document.querySelectorAll('.tab-btn').forEach(btn => {
-                            btn.addEventListener('click', () => setTimeout(resizeIframe, 50));
-                        });
-                    </script>
-                    
-                    <div class="mt-auto flex gap-2">
-                        <button class="w-1/2 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-xs">Copy HTML Tag</button>
-                        <button class="w-1/2 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-xs">Edit Mapping</button>
-                    </div>
-                </div>
-
-                <div class="card p-6 rounded-lg flex flex-col h-full bg-[#111] border-gray-800">
-                    <div class="flex justify-between items-start mb-4">
-                        <h2 class="text-xl font-bold text-white">Bauchbinde (9:16)</h2>
-                        <span class="bg-red-900 text-red-300 px-2 py-1 rounded text-xs uppercase font-bold">Motion</span>
-                    </div>
-                    <p class="text-gray-400 mb-4 text-sm">ESC-style name insert. Crop reveal from left. Wiener Melange font. Configurable via URL params or press E.</p>
-                    
-                    <div class="w-full mx-auto bg-[#fff] border border-gray-700 rounded overflow-hidden relative mb-4 iframe-wrapper" style="aspect-ratio: 9/16; max-width: 200px;">
-                        <iframe src="composition-bauchbinde.html" class="absolute top-0 left-0 w-[1080px] h-[1920px] pointer-events-none origin-top-left scaled-iframe"></iframe>
-                    </div>
-                    
-                    <div class="mt-auto flex gap-2">
-                        <a href="composition-bauchbinde.html" target="_blank" class="w-1/2 text-center py-2 bg-red-700 hover:bg-red-600 text-white font-semibold rounded transition text-xs block">▶ Preview</a>
-                        <button onclick="navigator.clipboard.writeText('composition-bauchbinde.html?name=Vorname+Name&role=Position')" class="w-1/2 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-xs">Copy Tag</button>
-                    </div>
-                </div>
-
-                <!-- Stadt Wien Insert Card -->
-                <div class="card p-6 rounded-lg flex flex-col h-full bg-[#111] border-gray-800">
-                    <div class="flex justify-between items-start mb-4">
-                        <h2 class="text-xl font-bold text-white">Stadt Wien 9:16 Insert</h2>
-                        <span class="bg-blue-900 text-blue-300 px-2 py-1 rounded text-xs uppercase font-bold">Motion</span>
-                    </div>
-                    <p class="text-gray-400 mb-4 text-sm">Stadt Wien name insert. Solid color from Wien palette. Crop reveal, Wiener Melange font. Press E to configure.</p>
-                    
-                    <!-- Static preview of Stadt Wien insert -->
-                    <div class="w-full mx-auto bg-[#1a1a1a] border border-gray-700 rounded overflow-hidden relative mb-4" style="aspect-ratio: 9/16; max-width: 220px;">
-                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:flex-start;justify-content:flex-start;">
-                            <div id="sw-preview-bar" style="margin-top:38%;background:#FF5A64;padding:6% 10% 6% 9%;display:inline-flex;flex-direction:column;">
-                                <span style="color:#fff;font-size:clamp(10px,3vw,18px);font-weight:800;letter-spacing:0.5px;line-height:1.15;white-space:nowrap">Vorname Name</span>
-                                <span style="color:#fff;font-size:clamp(8px,2.5vw,15px);font-weight:400;letter-spacing:0.3px;line-height:1.15;margin-top:2px;white-space:nowrap">Position</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex gap-1 mb-3 flex-wrap" id="sw-palette">
-                        <div class="w-6 h-6 rounded cursor-pointer border-2 border-white" style="background:#FF5A64" data-color="#FF5A64" onclick="document.getElementById('sw-preview-bar').style.background=this.dataset.color"></div>
-                        <div class="w-6 h-6 rounded cursor-pointer border-2 border-transparent hover:border-white" style="background:#AAAAFA" data-color="#AAAAFA" onclick="document.getElementById('sw-preview-bar').style.background=this.dataset.color"></div>
-                        <div class="w-6 h-6 rounded cursor-pointer border-2 border-transparent hover:border-white" style="background:#462346" data-color="#462346" onclick="document.getElementById('sw-preview-bar').style.background=this.dataset.color"></div>
-                        <div class="w-6 h-6 rounded cursor-pointer border-2 border-transparent hover:border-white" style="background:#82D282" data-color="#82D282" onclick="document.getElementById('sw-preview-bar').style.background=this.dataset.color"></div>
-                        <div class="w-6 h-6 rounded cursor-pointer border-2 border-transparent hover:border-white" style="background:#E6C828" data-color="#E6C828" onclick="document.getElementById('sw-preview-bar').style.background=this.dataset.color"></div>
-                        <div class="w-6 h-6 rounded cursor-pointer border-2 border-transparent hover:border-white" style="background:#D6D1CA" data-color="#D6D1CA" onclick="document.getElementById('sw-preview-bar').style.background=this.dataset.color"></div>
-                    </div>
-                    
-                    <div class="mt-auto flex gap-2">
-                        <a href="stadt-wien-insert.html" target="_blank" class="w-1/2 text-center py-2 bg-blue-700 hover:bg-blue-600 text-white font-semibold rounded transition text-xs block">▶ Preview</a>
-                        <button onclick="navigator.clipboard.writeText('stadt-wien-insert.html?name=Vorname+Name&role=Position&color=%23FF5A64')" class="w-1/2 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-xs">Copy Tag</button>
-                    </div>
-                </div>
-
-                <!-- Rapid Insert Card -->
-                <div class="card p-6 rounded-lg flex flex-col h-full bg-[#111] border-gray-800">
-                    <div class="flex justify-between items-start mb-4">
-                        <h2 class="text-xl font-bold text-white">Rapid Insert</h2>
-                        <span class="bg-green-900 text-green-300 px-2 py-1 rounded text-xs uppercase font-bold">Motion</span>
-                    </div>
-                    <p class="text-gray-400 mb-4 text-sm">FCPX-style name insert with original fill video. Green bar with Wiener Melange text overlay. 16:9.</p>
-                    
-                    <div class="w-full bg-[#000] border border-gray-700 rounded overflow-hidden relative mb-4 iframe-wrapper" style="aspect-ratio: 16/9;">
-                        <iframe src="composition-rapid-insert.html" class="absolute top-0 left-0 w-[1920px] h-[1080px] pointer-events-none origin-top-left scaled-iframe"></iframe>
-                    </div>
-                    
-                    <div class="mt-auto flex gap-2">
-                        <a href="composition-rapid-insert.html" target="_blank" class="w-1/2 text-center py-2 bg-green-700 hover:bg-green-600 text-white font-semibold rounded transition text-xs block">▶ Preview</a>
-                        <button onclick="navigator.clipboard.writeText('composition-rapid-insert.html?name=Vorname+Name&role=Position')" class="w-1/2 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-xs">Copy Tag</button>
-                    </div>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="template-grid">
+                <!-- Loaded dynamically from /api/motion-templates -->
             </div>
         </div>
 
@@ -591,13 +463,86 @@
         loadTemplates();
 
         async function loadTemplates() {
-            let templates = [];
+            const grid = document.getElementById('template-grid');
+            grid.innerHTML = '';
             try {
-                const res = await fetch('manifest.json');
-                if (res.ok) { const m = await res.json(); templates = m.templates; }
-            } catch (e) {}
-            // Existing template cards are static in HTML, this just adds dynamic ones later
+                const res = await fetch('/api/motion-templates');
+                if (!res.ok) return;
+                const templates = await res.json();
+                if (templates.length === 0) {
+                    grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">No motion templates found.</div>';
+                    return;
+                }
+                templates.forEach(t => {
+                    const isVertical = t.aspect_ratio === '9:16';
+                    const tagBadgeColor = isVertical ? 'bg-blue-900 text-blue-300' : 'bg-green-900 text-green-300';
+                    const ratio = isVertical ? '9/16' : '16/9';
+                    const iframeW = isVertical ? 1080 : 1920;
+                    const iframeH = isVertical ? 1920 : 1080;
+                    const previewMaxW = isVertical ? 'max-width: 200px;' : '';
+                    const tagUrl = '/motion-templates/' + t.id + '/template.html';
+
+                    // Build copy-tag URL params
+                    let paramStr = '';
+                    if (t.params && t.params.length > 0) {
+                        const parts = t.params.map(p => p + '=' + ({name:'Vorname+Name',role:'Position',color:encodeURIComponent(t.defaults?.color || '#FF5A64'),title:'Title',subtitle:'Subtitle',headline:'Headline',subtext:'Subtext',description:'Description',image:'image.jpg'}[p] || p));
+                        paramStr = '?' + parts.join('&');
+                    }
+
+                    // Tags
+                    let tagsHtml = '';
+                    if (t.tags && t.tags.length > 0) {
+                        tagsHtml = '<div class="flex gap-1 flex-wrap mt-3">' +
+                            t.tags.slice(0, 4).map(tag => '<span class="badge">' + tag + '</span>').join('') +
+                            '</div>';
+                    }
+
+                    // Palette for stadt-wien
+                    let paletteHtml = '';
+                    if (t.palette && t.palette.length > 0) {
+                        paletteHtml = '<div class="flex gap-1 mb-3 flex-wrap">' +
+                            t.palette.map((c, i) => '<div class="w-6 h-6 rounded cursor-pointer border-2 ' + (i === 0 ? 'border-white' : 'border-transparent hover:border-white') + '" style="background:' + c + '" data-color="' + c + '" onclick="document.getElementById(\'sw-bar-\'+\'' + t.id + '\').style.background=this.dataset.color"></div>').join('') +
+                            '</div>';
+                    }
+
+                    grid.innerHTML += `
+                        <div class="card p-6 rounded-lg flex flex-col h-full bg-[#111] border-gray-800">
+                            <div class="flex justify-between items-start mb-4">
+                                <h2 class="text-xl font-bold text-white">${t.title}</h2>
+                                <span class="${tagBadgeColor} px-2 py-1 rounded text-xs uppercase font-bold">${t.aspect_ratio}</span>
+                            </div>
+                            <p class="text-gray-400 mb-4 text-sm flex-1">${t.description}</p>
+                            <div class="w-full ${isVertical ? 'mx-auto' : ''} bg-[#000] border border-gray-700 rounded overflow-hidden relative mb-4 iframe-wrapper" style="aspect-ratio: ${ratio}; ${previewMaxW}">
+                                <iframe src="${tagUrl}" class="absolute top-0 left-0 w-[${iframeW}px] h-[${iframeH}px] pointer-events-none origin-top-left scaled-iframe"></iframe>
+                            </div>
+                            ${paletteHtml}
+                            ${tagsHtml}
+                            <div class="mt-auto flex gap-2 pt-3">
+                                <a href="${tagUrl}" target="_blank" class="w-1/2 text-center py-2 bg-red-700 hover:bg-red-600 text-white font-semibold rounded transition text-xs block">▶ Preview</a>
+                                <button onclick="navigator.clipboard.writeText('${tagUrl}${paramStr}')" class="w-1/2 text-center py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded transition text-xs">Copy Tag</button>
+                            </div>
+                        </div>`;
+                });
+
+                // Resize iframes after render
+                setTimeout(resizeIframe, 100);
+            } catch(e) { /* ignore */ }
         }
+
+        // Iframe resize
+        function resizeIframe() {
+            const wrappers = document.querySelectorAll('.iframe-wrapper');
+            const iframes = document.querySelectorAll('.scaled-iframe');
+            wrappers.forEach((wrapper, i) => {
+                const iframe = iframes[i];
+                if(wrapper && iframe) {
+                    const iW = parseInt(iframe.style.width) || (iframe.classList.contains('vertical') ? 1080 : 1920);
+                    const scale = wrapper.clientWidth / iW;
+                    iframe.style.transform = `scale(${scale})`;
+                }
+            });
+        }
+        window.addEventListener('resize', resizeIframe);
     </script>
 </body>
 </html>

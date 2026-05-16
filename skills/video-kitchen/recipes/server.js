@@ -160,4 +160,32 @@ app.get('/api/reference-renders', (req, res) => {
 
 app.use('/reference-renders', express.static(path.join(__dirname, 'reference-renders')));
 
+// Motion Templates API
+const motionTemplatesDir = path.join(__dirname, '..', 'motion-templates');
+app.get('/api/motion-templates', (req, res) => {
+    try {
+        const templates = [];
+        if (!fs.existsSync(motionTemplatesDir)) return res.json(templates);
+        const dirs = fs.readdirSync(motionTemplatesDir, { withFileTypes: true })
+                       .filter(d => d.isDirectory());
+        dirs.forEach(d => {
+            const configPath = path.join(motionTemplatesDir, d.name, 'config.json');
+            const config = readJsonSafe(configPath);
+            if (!config) return;
+            const hasTemplate = fs.existsSync(path.join(motionTemplatesDir, d.name, 'template.html'));
+            templates.push({
+                ...config,
+                id: config.id || d.name,
+                hasTemplate
+            });
+        });
+        res.json(templates);
+    } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Serve motion template files
+app.use('/motion-templates', express.static(motionTemplatesDir));
+
 app.listen(8080, () => console.log('Listening on port 8080'));

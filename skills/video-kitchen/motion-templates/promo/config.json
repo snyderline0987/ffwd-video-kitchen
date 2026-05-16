@@ -1,0 +1,10 @@
+{
+  "id": "promo",
+  "title": "Promo Card",
+  "description": "Animated promo card with image, title and description. Social media ready.",
+  "aspect_ratio": "16:9",
+  "resolution": "1920x1080",
+  "duration": "10s",
+  "params": ["title", "description", "image"],
+  "tags": ["promo", "social"]
+}
